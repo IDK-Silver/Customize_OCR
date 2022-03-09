@@ -14,8 +14,36 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
+# Excel - Option
+# -----------------------------------------------------------------------------------------------
+if(NOT DEFINED ${QXLSX_PARENTPATH})
+	set(QXLSX_PARENTPATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries)
+endif(NOT DEFINED ${QXLSX_PARENTPATH}) 
+	
+if(NOT DEFINED ${QXLSX_HEADERPATH})	
+	set(QXLSX_HEADERPATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/QXlsx/header)
+endif(NOT DEFINED ${QXLSX_HEADERPATH})		
 
-#¡@PaddleOCR Option
+if(NOT DEFINED ${QXLSX_SOURCEPATH})
+	set(QXLSX_SOURCEPATH ${CMAKE_CURRENT_SOURCE_DIR}/libraries/QXlsx/source)
+endif(NOT DEFINED ${QXLSX_SOURCEPATH})	
+
+message("Current Path of QXlsx")
+message(${QXLSX_PARENTPATH})
+message(${QXLSX_HEADERPATH})
+message(${QXLSX_SOURCEPATH})
+
+include_directories(${QXLSX_HEADERPATH})
+
+file(GLOB QXLSX_CPP "${QXLSX_SOURCEPATH}/*.cpp")
+file(GLOB QXLSX_H "${QXLSX_HEADERPATH}/*.h")
+
+set(QXlse_SRC_FILES ${QXLSX_CPP})
+list(APPEND QXlse_SRC_FILES ${QXLSX_H})
+ 
+
+# PaddleOCR - Option
+# -----------------------------------------------------------------------------------------------
 set(DEMO_NAME "Customize_OCR")
 option(WITH_MKL        "Compile demo with MKL/OpenBlas support, default use MKL."       ON)
 option(WITH_GPU        "Compile demo with GPU/CPU, default use CPU."                    OFF)
@@ -259,13 +287,15 @@ set(PROJECT_SOURCES
         "src/widget/mainwinodw/mainwindow.h"
         "src/widget/mainwinodw/mainwindow.ui"
 
-
         
 )
 
 
-add_executable(Customize_OCR ${PROJECT_SOURCES})
-target_link_libraries(Customize_OCR PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${DEPS})
+# list(APPEND PROJECT_SOURCES ${QXlse_SRC_FILES})
+
+add_executable(Customize_OCR ${PROJECT_SOURCES} ${QXlse_SRC_FILES})
+
+target_link_libraries(Customize_OCR PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${DEPS} Qt${QT_VERSION_MAJOR}::GuiPrivate)
 
 
 

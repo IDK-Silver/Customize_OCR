@@ -13,14 +13,16 @@
 
 #define SETTING_FILENAME "result.json"
 #define OCR_FOLDER_PATH "ocr_folder"
-
-
+#define SUCCESS_IMAGE_PATH "success_image"
+#define FAILED_IMAGE_PATH "failed_image"
 #define orientation_horizontal "orientation_horizontal"
 #define orientation_vertical "orientation_vertical"
 
 
 struct App_Data
 {
+    QString process_file_path;
+    bool auto_write_mode;
     QString excel_file_path = nullptr;
 };
 
