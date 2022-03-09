@@ -21,16 +21,16 @@ void APP_Setting::generate_default()
 
     QJsonObject type_data;
 
-    QJsonArray home_crop_addres = { 540, 227, 785, 275 };
+    QJsonArray home_crop_addres = { 185, 458, 1025, 505 };
 
     APP_Setting_Key key_word;
 
     type_data.insert(key_word.types.type.home_crop_addres, home_crop_addres);
 
-    QJsonArray phone_crop_addres = { 1, 2, 3, 4 };
+    QJsonArray phone_crop_addres = { 215, 633, 500, 675 };
     type_data.insert(key_word.types.type.phone_crop_addres, phone_crop_addres);
 
-    QJsonArray name_crop_addres = { 540, 227, 785, 275 };
+    QJsonArray name_crop_addres = { 540, 232, 785, 275 };
     type_data.insert(key_word.types.type.name_crop_addres, name_crop_addres);
 
     QJsonArray check_list;
@@ -50,10 +50,10 @@ void APP_Setting::generate_default()
 
     QJsonObject vector_data;
 
-    QJsonArray vector_crop_addres = {55, 3075, 245, 3135};
+    QJsonArray vector_crop_addres = {2285, 2960, 2350, 3020};
     vector_data.insert(key_word.types.type.vector.data.vector_crop_addres, vector_crop_addres);
 
-    QString vector_string = "¤É¯d¯Å";
+    QString vector_string = "¸¹";
     vector_data.insert(key_word.types.type.vector.data.vector_string, vector_string);
 
     QString vector_orientation = orientation_vertical;

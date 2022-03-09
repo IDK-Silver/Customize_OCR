@@ -10,12 +10,6 @@ namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 
-struct OCR_Data
-{
-    QString excel_file_path = nullptr;
-};
-
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -26,7 +20,7 @@ public:
 
     // variable
     OCR_Image ocr_image;
-    OCR_Data ocr_data;
+    App_Data app_data;
     
 private:
     Ui::MainWindow *ui;

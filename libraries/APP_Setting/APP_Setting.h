@@ -9,6 +9,8 @@
 
 #include <vector>
 
+#define SHOW_DEBUG_IMAGE false
+
 #define SETTING_FILENAME "result.json"
 #define OCR_FOLDER_PATH "ocr_folder"
 
@@ -16,6 +18,11 @@
 #define orientation_horizontal "orientation_horizontal"
 #define orientation_vertical "orientation_vertical"
 
+
+struct App_Data
+{
+    QString excel_file_path = nullptr;
+};
 
 struct APP_Setting_Key
 {

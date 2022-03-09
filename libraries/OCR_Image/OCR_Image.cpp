@@ -44,6 +44,34 @@ cv::Mat OCR_Image::QImage2cvMat(QImage image)
     return mat;
 }
 
+QPixmap OCR_Image::Mat2QPixmap(cv::Mat mat)
+{
+    QPixmap pixmap;
+    if (mat.type() == CV_8UC1)
+    {
+        // Set the color table (used to translate colour indexes to qRgb values)
+        QVector<QRgb> colorTable;
+        for (int i = 0; i < 256; i++)
+            colorTable.push_back(qRgb(i, i, i));
+        // Copy input Mat
+        const uchar* qImageBuffer = (const uchar*)mat.data;
+        // Create QImage with same dimensions as input Mat
+        QImage img(qImageBuffer, mat.cols, mat.rows, mat.step, QImage::Format_Indexed8);
+        img.setColorTable(colorTable);
+        pixmap = QPixmap::fromImage(img);
+    }
+    // 8-bits unsigned, NO. OF CHANNELS=3
+    if (mat.type() == CV_8UC3)
+    {
+        // Copy input Mat
+        const uchar* qImageBuffer = (const uchar*)mat.data;
+        // Create QImage with same dimensions as input Mat
+        QImage img(qImageBuffer, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
+        pixmap = QPixmap::fromImage(img.rgbSwapped());
+    }
+    return pixmap;
+}
+
 std::vector<std::vector<std::string>> OCR_Image::ocr_src_image()
 {
     cv::Mat srcimg = cv::imread(this->image_path, cv::IMREAD_COLOR);
@@ -100,7 +128,7 @@ std::vector<std::vector<std::string>> OCR_Image::ocr_src_image()
     return im_strs;
 }
 
-std::string OCR_Image::ocr_part_image(cv::Mat input_image, bool run_det)
+std::string OCR_Image::ocr_part_image(cv::Mat input_image, bool run_det, std::string choose_rec_model_dir)
 {
     cv::Mat srcimg = input_image;
 
@@ -131,7 +159,7 @@ std::string OCR_Image::ocr_part_image(cv::Mat input_image, bool run_det)
     if (ocr_config->benchmark)
         auto char_list_file = ocr_config->char_list_file.substr(6);
 
-    auto rec = new CRNNRecognizer(ocr_config->rec_model_dir, ocr_config->use_gpu, ocr_config->gpu_id,
+    auto rec = new CRNNRecognizer(choose_rec_model_dir, ocr_config->use_gpu, ocr_config->gpu_id,
         ocr_config->gpu_mem, ocr_config->cpu_threads,
         ocr_config->enable_mkldnn, char_list_file,
         ocr_config->use_tensorrt, ocr_config->precision, ocr_config->rec_batch_num);

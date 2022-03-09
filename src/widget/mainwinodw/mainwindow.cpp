@@ -2,11 +2,14 @@
 #include "./ui_mainwindow.h"
 
 #include <qfiledialog.h>
+#include <qjsonarray.h>
+#include <qjsonobject.h>
+#include <qmap.h>
+#include <qvector.h>
+#include <qpixmap.h>
 
 #include "libraries/OCR_Image/OCR_Image.h"
 #include "libraries/ImageUtility/ImageUtility.h"
-#include <qjsonarray.h>
-#include <qjsonobject.h>
 
 #include <iostream>
 #include <qdebug.h>
@@ -103,6 +106,7 @@ void MainWindow::start_ocr()
         // read vector
         for (auto vector : vector_list)
         {
+            OCR_Config ocr_config;
             // rotary src image
             // image orientation
             QString orientation_mode = vector.toObject().value(key_word.types.type.vector.data.image_orientation).toString();
@@ -133,7 +137,7 @@ void MainWindow::start_ocr()
             cv::Mat vector_crop_image = ImageUtility::crop(src_image, vector_crop);
 
             // ocr crop vector image
-            QString ocr_vector_string = QString::fromStdString(ocr_image.ocr_part_image(vector_crop_image, false));
+            QString ocr_vector_string = QString::fromStdString(ocr_image.ocr_part_image(vector_crop_image, false, ocr_config.rec_model_dir));
 
 
             auto is_image_type_true = [&] () {
@@ -158,43 +162,54 @@ void MainWindow::start_ocr()
                     cv::Mat check_crop_image = ImageUtility::crop(src_image, check_crop);
 
                     // ocr crop vector image
-                    QString ocr_check_string = QString::fromStdString(ocr_image.ocr_part_image(check_crop_image, false));
+                    QString ocr_check_string = QString::fromStdString(ocr_image.ocr_part_image(check_crop_image, true, ocr_config.rec_model_dir));
                 }
 
                 return false;
             };
 
-            auto ocr_part_image = [&]() {
+            auto ocr_part = [] (QJsonObject& type, QString& key, OCR_Image& ocr_image,  cv::Mat& src_image, bool is_num_image) {
 
-                std::vector<std::string> ocr_strs;
+                OCR_Data data;
+                OCR_Config orc_config;
+                std::vector<int> crop;
+                auto obj = type.value(key).toArray().toVariantList();
+                for (auto pointer : obj) { crop.push_back(pointer.toInt()); }
 
-                std::vector<int> name_crop;
-                auto name_obj = type.value(key_word.types.type.name_crop_addres).toArray().toVariantList();
-                for (auto pointer : name_obj) { name_crop.push_back(pointer.toInt()); }
-
-                std::vector<int> phone_crop;
-                auto phone_obj = type.value(key_word.types.type.phone_crop_addres).toArray().toVariantList();
-                for (auto pointer : phone_obj) { phone_crop.push_back(pointer.toInt()); }
-
-                std::vector<int> home_crop;
-                auto home_obj = type.value(key_word.types.type.home_crop_addres).toArray().toVariantList();
-                for (auto pointer : home_obj) { home_crop.push_back(pointer.toInt()); }
-            
-                cv::Mat part_image;
-
-                for (auto i : name_crop)
-                    qDebug() << i;
-
-                part_image = ImageUtility::crop(src_image, name_crop);
-                cv::imshow("123", part_image);
-                cv::waitKey();
-                auto i = QString::fromStdString(ocr_image.ocr_part_image(part_image, true));
-                
-               
-                
+                cv::Mat part_image = ImageUtility::crop(src_image, crop);
+                cv::Mat det_image;
+                cv::copyMakeBorder(part_image, det_image, 15, 15, 15, 15, cv::BORDER_CONSTANT, cv::Scalar(255, 255, 255));
+                if (SHOW_DEBUG_IMAGE)
+                {
+                    cv::imshow("", det_image);
+                    cv::waitKey();
+                }
+                QString string;
+                if (is_num_image)
+                    string = QString::fromStdString(ocr_image.ocr_part_image(det_image, true, orc_config.en_rec_model_dir));
+                else 
+                    string = QString::fromStdString(ocr_image.ocr_part_image(det_image, true, orc_config.rec_model_dir));
 
 
-                return ocr_strs;
+                data.image = part_image;
+                data.string = string.toStdString();
+                return data;
+            };
+
+            auto updata_ui = [&]() {
+                auto name_data = ocr_part(type, key_word.types.type.name_crop_addres, ocr_image, src_image, false);
+                auto home_data = ocr_part(type, key_word.types.type.home_crop_addres, ocr_image, src_image, false);
+                auto photo_data = ocr_part(type, key_word.types.type.phone_crop_addres, ocr_image, src_image, false);
+
+                ui->lineEdit_text_home->setText(QString::fromStdString(home_data.string));
+                ui->lineEdit_text_phone->setText(QString::fromStdString(photo_data.string));
+                ui->lineEdit_text_name->setText(QString::fromStdString(name_data.string));
+
+                ui->label_image_home->setScaledContents(true);
+                ui->label_image_home->setPixmap(ocr_image.Mat2QPixmap(home_data.image));
+
+                ui->label_image_phone->setPixmap(ocr_image.Mat2QPixmap(photo_data.image));
+                ui->label_image_name->setPixmap(ocr_image.Mat2QPixmap(name_data.image));
             };
 
             // OCR_Part name phone home
@@ -202,36 +217,22 @@ void MainWindow::start_ocr()
             // rotate image to true orientation
             if (vector_check_string == ocr_vector_string)
             {
-                ocr_part_image();
+                updata_ui();
             }
             else
             {
                 src_image = ImageUtility::rotate(src_image, 180);
                 vector_crop_image = ImageUtility::crop(src_image, vector_crop);;
-                ocr_vector_string = QString::fromStdString(ocr_image.ocr_part_image(vector_crop_image, false));
+                ocr_vector_string = QString::fromStdString(ocr_image.ocr_part_image(vector_crop_image, false, ocr_config.rec_model_dir));
                 if (vector_check_string == ocr_vector_string)
                 {
-                    ocr_part_image();
+                    updata_ui();
                 }
                 else
                     // to next type
                     continue;
             }
-            
-            
-            
-            
-
-            
         }
-
-
-
-
-
-        // std::vector<int> crop = QVector<int>(crop_list.begin(), crop_list.end()).toStdVector();
-
-
     }
   
 }
@@ -252,7 +253,7 @@ void MainWindow::OCR_Test()
 QString MainWindow::openfile()
 {
     auto file_path = QFileDialog::getOpenFileName(this, "¿ï¨úExcelÀÉ", QDir::homePath(), "ExcelÀÉ (*.xlsx)");
-    this->ocr_data.excel_file_path = file_path;
+    this->app_data.excel_file_path = file_path;
     return file_path;
 }
 

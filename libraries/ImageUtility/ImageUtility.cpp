@@ -48,7 +48,7 @@ cv::Mat ImageUtility::crop(cv::Mat src_image, int x1, int y1, int x2, int y2)
 								   
 	cv::Mat crop_image = src_image(rect);
 
-	return crop_image;
+	return crop_image.clone();
 }
 
 cv::Mat ImageUtility::crop(cv::Mat src_image, std::vector<int> size)
