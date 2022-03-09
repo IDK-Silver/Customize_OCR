@@ -25,15 +25,23 @@ public:
 private:
     Ui::MainWindow *ui;
 
+    // funciton
     QStringList get_ocr_files_path(QString);
+    bool move_to_folder(QString file_path, QString folder);
+    void clear_ui();
+    
+
 
 private slots:
+
     QString openfile();
 
     void start_ocr();
 
     void OCR_Test();
 
+    void data_right();
+    void data_error();
     
 
 };

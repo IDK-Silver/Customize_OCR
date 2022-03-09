@@ -7,6 +7,7 @@
 #include <qmap.h>
 #include <qvector.h>
 #include <qpixmap.h>
+#include <qxmlstream.h>
 
 #include "libraries/OCR_Image/OCR_Image.h"
 #include "libraries/ImageUtility/ImageUtility.h"
@@ -27,10 +28,24 @@ MainWindow::MainWindow(QWidget *parent)
 
     // connect
     
+    // ocr imgage
     connect(this->ui->pushButton_start, SIGNAL(pressed()), SLOT(start_ocr()));
 
     // open file 
-    connect(this->ui->actionOpenFiles, &QAction::triggered, this, &MainWindow::openfile);
+    connect(this->ui->actionOpenFiles, &QAction::triggered, this, &MainWindow::openfile);;
+
+    // data is right
+    connect(this->ui->pushButton_yes, &QPushButton::pressed, this, &MainWindow::data_right);
+
+    // data is error
+    connect(this->ui->pushButton_no, &QPushButton::pressed, this, &MainWindow::data_error);
+
+    // change mode
+    connect(this->ui->checkBox_auto_write2excel, &QCheckBox::stateChanged, [&] () {
+        this->app_data.auto_write_mode = this->ui->checkBox_auto_write2excel->isChecked();
+            qDebug() << QString("Auto Write State Changed, Now is %1").arg((this->app_data.auto_write_mode == true) ? "Enable": "Disable");
+     });
+
 
 
 
@@ -59,6 +74,30 @@ QStringList MainWindow::get_ocr_files_path(QString ocr_folder_path)
     return files_path;
 }
 
+bool MainWindow::move_to_folder(QString file_path, QString folder)
+{
+    QFile file(file_path);
+    QDir move_path(folder);
+    
+    QString file_name = file.fileName().split("/").at(file.fileName().split("/").size() - 1);
+    
+    if (SHOW_DEBUG_IMAGE)
+        qDebug() << move_path.absoluteFilePath(file_name);
+  
+    return file.rename(move_path.absoluteFilePath(file_name));
+}
+
+void MainWindow::clear_ui()
+{
+    this->ui->label_text_filename->clear();
+    this->ui->lineEdit_text_home->clear();
+    this->ui->lineEdit_text_name->clear();
+    this->ui->lineEdit_text_phone->clear();
+    this->ui->label_image_home->clear();
+    this->ui->label_image_name->clear();
+    this->ui->label_image_phone->clear();
+}
+
 void MainWindow::start_ocr()
 {
 
@@ -67,14 +106,20 @@ void MainWindow::start_ocr()
 
     // check folder have file
     QString file_path;
+
     if (file_paths.isEmpty())
     {
         qDebug() << "No file, foldr is empty";
+        this->app_data.process_file_path = nullptr;
         return;
     }
     else
+    {
         // set file path is first file path
         file_path = file_paths.at(0);
+        this->app_data.process_file_path = file_path;
+        this->ui->label_text_filename->setText(file_path.split("/").at(file_path.split("/").size() - 1).split(".").at(0));
+    }
 
     // load src image
     auto src_image = cv::imread(file_path.toLocal8Bit().toStdString());
@@ -247,6 +292,24 @@ void MainWindow::OCR_Test()
     auto stack_str = ocr_image.ocr_src_image();
 
     std::cout << ocr_image.merge_src_string(stack_str);
+}
+
+void MainWindow::data_right()
+{
+    if (this->app_data.auto_write_mode)
+    {
+
+    }
+    bool is_move_success = MainWindow::move_to_folder(this->app_data.process_file_path, QString(SUCCESS_IMAGE_PATH));
+    if (is_move_success)
+        this->clear_ui();
+}
+
+void MainWindow::data_error()
+{
+    bool is_move_success = MainWindow::move_to_folder(this->app_data.process_file_path, QString(FAILED_IMAGE_PATH));
+    if (is_move_success)
+        this->clear_ui();
 }
 
 

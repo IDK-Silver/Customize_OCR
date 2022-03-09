@@ -1,6 +1,6 @@
 #include <QtWidgets/QApplication>
 #include <src/widget/mainwinodw/mainwindow.h>
-#include "libraries/APP_Setting/APP_Setting.h"
+
 
 int main(int argc, char* argv[])
 {
