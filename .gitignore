@@ -35,3 +35,5 @@
 /paddle_inference
 /.vs
 /model/*
+CMakeLists.txt.user
+CMakeSettings.json
