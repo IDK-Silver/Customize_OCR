@@ -283,6 +283,9 @@ set(PROJECT_SOURCES
         "libraries/ImageUtility/ImageUtility.h"
         "libraries/ImageUtility/ImageUtility.cpp"
 
+        "libraries/ExcelWrite/ExcelWrite.h"
+        "libraries/ExcelWrite/ExcelWrite.cpp"
+
         "src/widget/mainwinodw/mainwindow.cpp"
         "src/widget/mainwinodw/mainwindow.h"
         "src/widget/mainwinodw/mainwindow.ui"
@@ -301,6 +304,8 @@ target_link_libraries(Customize_OCR PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${DEP
 
 if (WIN32 AND WITH_MKL)
     add_custom_command(TARGET ${DEMO_NAME} POST_BUILD
+
+        # Paddle OCR
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/mklml.dll ./mklml.dll
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/libiomp5md.dll ./libiomp5md.dll
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mkldnn/lib/mkldnn.dll ./mkldnn.dll
@@ -308,5 +313,9 @@ if (WIN32 AND WITH_MKL)
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mklml/lib/libiomp5md.dll ./release/libiomp5md.dll
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/third_party/install/mkldnn/lib/mkldnn.dll ./release/mkldnn.dll
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${PADDLE_LIB}/paddle/lib/paddle_inference.dll ./paddle_inference.dll
+
+        #OpenCV
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_DIR}/build/x64/vc15/bin/opencv_world455.dll ./opencv_world455.dll
+
     )
 endif()
