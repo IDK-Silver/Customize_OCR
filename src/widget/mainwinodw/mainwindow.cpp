@@ -9,8 +9,10 @@
 #include <qpixmap.h>
 #include <qxmlstream.h>
 
+#include "libraries/QXlsx/header/xlsxdocument.h"
 #include "libraries/OCR_Image/OCR_Image.h"
 #include "libraries/ImageUtility/ImageUtility.h"
+#include "libraries/ExcelWrite/ExcelWrite.h"
 
 #include <iostream>
 #include <qdebug.h>
@@ -298,9 +300,28 @@ void MainWindow::data_right()
 {
     if (this->app_data.auto_write_mode)
     {
+        excel_write::ExcelDoc excel_doc(this->app_data.excel_file_path);
+
+        // load setting file
+        APP_Setting_Key key_word;
+        APP_Setting setting;
+        setting.load_file(SETTING_FILENAME);
+
+        // get root json object
+        QJsonObject root_json = setting.get_obj().toObject();
+
+        // get type json object
+        QJsonObject xlsx_obj = root_json.value(key_word.xlsx.key).toObject();
+
+        //auto name_col = xlsx_obj.value(key_word.xlsx.data.name_col).toString();
+        // excel_doc.search(excel_write::col_en2num(name_col), this->ui->lineEdit_text_name->text());
+
+
 
     }
+
     bool is_move_success = MainWindow::move_to_folder(this->app_data.process_file_path, QString(SUCCESS_IMAGE_PATH));
+
     if (is_move_success)
         this->clear_ui();
 }
