@@ -69,7 +69,7 @@ QStringList MainWindow::get_ocr_files_path(QString ocr_folder_path)
     QFileInfoList list = dir.entryInfoList();
    
     for (int i = 0; i < list.size(); i++) {
-        QFileInfo fileInfo = list.at(i).absoluteFilePath();
+        QFileInfo fileInfo = QFileInfo(list.at(i).absoluteFilePath());
         qDebug() << dir.absoluteFilePath(fileInfo.fileName()).toLocal8Bit();
         files_path.push_back(dir.absoluteFilePath(fileInfo.fileName()).toLocal8Bit());
     }
