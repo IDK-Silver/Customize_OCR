@@ -31,10 +31,20 @@
 *.out
 *.app
 
-/paddle_inference
-.vs
-/model/*
-CMakeLists.txt.user
-CMakeSettings.json
+#Build Folder
 out
 build
+cmake-build-debug
+cmake-build-release
+cmake-build-release-visual-studio
+
+# EX Lib
+/paddle_inference
+/model/*
+
+#IDE Setting
+.vs
+.idea
+CMakeLists.txt.user
+CMakeSettings.json
+
