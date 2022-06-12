@@ -36,13 +36,13 @@ set(Qt_Widgets
         )
 
 set(Lib_Config
-        libs/Config/Files_Path/Files_Path.cpp
-        libs/Config/Files_Path/Files_Path.h
-        libs/Config/Global_Config/Global_Config.cpp
-        libs/Config/Global_Config/Global_Config.h)
+        lib/Config/Files_Path/Files_Path.cpp
+        lib/Config/Files_Path/Files_Path.h
+        lib/Config/Global_Config/Global_Config.cpp
+        lib/Config/Global_Config/Global_Config.h)
 
 set(Lib_Utility
-        libs/Utility/Files_Manager/Files_Manager.cpp libs/Utility/Files_Manager/Files_Manager.h)
+        lib/Utility/Files_Manager/Files_Manager.cpp lib/Utility/Files_Manager/Files_Manager.h)
 
 set(PROJECT_SOURCES
         src/main.cpp

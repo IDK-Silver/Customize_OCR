@@ -1,6 +1,6 @@
 #include <QtWidgets/QApplication>
 #include <src/widget/main_window//main_window.h>
-#include <libs/Config/Files_Path/Files_Path.h>
+#include <lib/Config/Files_Path/Files_Path.h>
 #include <src/widget/ocr_detect_widget/ocr_detect_widget.h>
 #include <QDebug>
 
