@@ -33,7 +33,7 @@ set(Qt_Widgets
         src/widget/ocr_format_create_widget/ocr_format_create_widget.ui
         src/widget/ocr_format_create_widget/ocr_format_create_widget.cpp
         src/widget/ocr_format_create_widget/ocr_format_create_widget.h
-        )
+        src/widget/image_view_widget/image_view_widget.cpp src/widget/image_view_widget/image_view_widget.h)
 
 set(Lib_Config
         lib/Config/Files_Path/Files_Path.cpp
@@ -51,7 +51,7 @@ set(PROJECT_SOURCES
         ${Lib_Utility}
         )
 
-add_executable(PDF_Tool ${PROJECT_SOURCES})
-target_link_libraries(PDF_Tool PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+add_executable(Customize_OCR ${PROJECT_SOURCES})
+target_link_libraries(Customize_OCR PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 
 
