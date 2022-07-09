@@ -1,6 +1,4 @@
-//
-// Created by idk on 2022/6/16.
-//
+
 
 #ifndef CUSTOMIZE_OCR_IMAGE_VIEW_WIDGET_H
 #define CUSTOMIZE_OCR_IMAGE_VIEW_WIDGET_H
@@ -35,7 +33,13 @@ private:
     int y_pos = 0;              // y 的位置
     QPoint old_pos;             // 上一次的滑鼠位置
     bool is_pressed = false;    // 滑鼠是否在按壓
+
+    QPoint first_press_pos;
+    QPoint second_press_pos;
     int mouse_press_mod = MousePressEvent::MoveImage;
+
+    QRect getReac(QPoint first_pos, QPoint second_pos);
+
 protected:
 
     void paintEvent(QPaintEvent *event) override;
