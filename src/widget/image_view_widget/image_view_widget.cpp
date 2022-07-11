@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QWheelEvent>
+#include "lib/Config/Global_Config/Global_Config.h"
 
 ImageViewLabel::ImageViewLabel(QWidget *parent) : QLabel(parent) {
 
@@ -24,7 +25,7 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
     QPainter painter(this);
 
     switch (mouse_press_mod) {
-        case MousePressEvent::PainterPen:
+        case MousePressEvent::MoveImage:
         {
             // 根据窗視窗計算圖片大小
             int width = qMin(original_image.width(), this->width());
@@ -43,14 +44,13 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
             painter.drawImage(pic_rect, this->original_image);
             break;
         }
-        case MousePressEvent::MoveImage:
+        case MousePressEvent::PainterPen:
+
             int center_point_x = this->width() / 2;
             int center_point_y = this->height() / 2;
 
 
             // 圖片置中顯示
-
-
             auto match_image = [=](QImage image, int width, int height) {
                 int image_width = 0, image_height = 0;
                 float match_scale_width = float(width) / float(image.width());
@@ -61,10 +61,7 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
                 return QPoint(image_width, image_height);
             };
 
-
-
-
-            // zoom
+            // 裁切縮放
             int image_zoom_size_width = this->original_image.width() * zoom_value;
             int image_zoom_size_height = this->original_image.height() * zoom_value;
             int overflow_zoom_size_width = image_zoom_size_width - this->original_image.width();
@@ -84,15 +81,18 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
                 break;
             }
 
-            qDebug() << "x pos" << x_pos << "y pos" << y_pos;
-            qDebug() << "crop size" << crop_image.width() << crop_image.height();
-            qDebug() << "LX-Pad" << overflow_zoom_size_width / 2 - x_pos << "RX-Pad " << original_image.width() - overflow_zoom_size_width;
-            qDebug() << "LY-Pad" << overflow_zoom_size_height / 2 - y_pos<< "RY-Pad " << original_image.height() - overflow_zoom_size_height;
-            qDebug() << "Overflow x " << overflow_zoom_size_width << "Overflow y " << overflow_zoom_size_height;
+            if (Config::Global::is_output_log_message) {
+                qDebug() << "Image View Info";
+                qDebug() << "x pos" << x_pos << "y pos" << y_pos;
+                qDebug() << "crop size" << crop_image.width() << crop_image.height();
+                qDebug() << "LX-Pad" << overflow_zoom_size_width / 2 - x_pos << "RX-Pad " << original_image.width() - overflow_zoom_size_width;
+                qDebug() << "LY-Pad" << overflow_zoom_size_height / 2 - y_pos<< "RY-Pad " << original_image.height() - overflow_zoom_size_height;
+                qDebug() << "Overflow x " << overflow_zoom_size_width << "Overflow y " << overflow_zoom_size_height;
+                qDebug() << (overflow_zoom_size_width / 2 - x_pos) + (original_image.width() - overflow_zoom_size_width);
+            }
 
-            qDebug() << (overflow_zoom_size_width / 2 - x_pos) + (original_image.width() - overflow_zoom_size_width);
 
-            // Left Padding > OverFlow Width
+            // 消除黑邊, 把超出圖片的範圍繪製白色
             if ((overflow_zoom_size_width / 2 - x_pos) > overflow_zoom_size_width) {
                 // Crop Image Width - (Left Padding - OverFlow Width)
                 for (int index_width = crop_image.width() - ((overflow_zoom_size_width / 2 - x_pos) - overflow_zoom_size_width);
@@ -138,32 +138,58 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
                 }
             }
 
-
-
-
-
-
-
-//            for (auto i = 0; i < crop_image.width(); i++) {
-//                QRgb value = qRgb(255, 255, 255);
-//                for (auto j = 0; j < crop_image.height(); j++)
-//                    crop_image.setPixel(i, j, value);
-//            }
-//
-
-
-
-
+            // 繪製時預留邊寬, 讓圖片可以置中顯示
 
             int image_padding_width = (this->width() - match_image(crop_image, this->width(), this->height()).x()) / 2;
             int image_padding_height = (this->height() - match_image(crop_image, this->width(), this->height()).y()) / 2;
-
-
             QRect image_rect(image_padding_width, image_padding_height,
                              match_image(crop_image, this->width(), this->height()).x(),
                              match_image(crop_image, this->width(), this->height()).y());
 
             painter.drawImage(image_rect, crop_image);
+
+
+
+
+
+            //   繪製選取框
+            float match_scale_value = match_image(crop_image, this->width(), this->height()).x() / float(crop_image.width());
+            QPoint rect_l((first_press_pos.x() - image_padding_width) / match_scale_value + overflow_zoom_size_width / 2 - x_pos,
+                          (first_press_pos.y() - image_padding_height) / match_scale_value + overflow_zoom_size_height / 2 - y_pos) ;
+            QPoint rect_r((second_press_pos.x() - image_padding_width) / match_scale_value + overflow_zoom_size_width / 2 - x_pos,
+                          (second_press_pos.y() - image_padding_height) / match_scale_value + overflow_zoom_size_height / 2 - y_pos);
+
+
+            auto check_select_range = [] (QPoint& point, QImage image) {
+                if (point.x() > image.width())
+                    point.setX(image.width());
+                else if (point.x() < 0)
+                    point.setX(0);
+
+                if (point.y() > image.height())
+                    point.setY(image.height());
+                else if (point.y() < 0)
+                    point.setY(0);
+            };
+
+
+            check_select_range(rect_l, original_image);
+            check_select_range(rect_r, original_image);
+
+
+
+            QRect select_rect(rect_l, rect_r);
+
+            if (Config::Global::is_output_log_message) {
+                qDebug() << match_scale_value << select_rect;
+            }
+
+            QImage save_image = original_image.copy(select_rect);
+            save_image.save("C:\\Users\\idk\\Desktop\\crop_save.jpg");
+
+            painter.drawRect(QRect(first_press_pos, second_press_pos));
+
+
 
             break;
     }
@@ -172,7 +198,8 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
 
 void ImageViewLabel::wheelEvent(QWheelEvent *event) {
     int value = event->angleDelta().y();
-
+    first_press_pos = QPoint();
+    second_press_pos = QPoint();
     if (value > 0)  // 放大
         zoom_in_image();
     else            // 縮小
