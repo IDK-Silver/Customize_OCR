@@ -27,19 +27,19 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
     switch (mouse_press_mod) {
         case MousePressEvent::MoveImage:
         {
-            // ®ÚÕuµ¡µøµ¡­pºâ¹Ï¤ù¤j¤p
+            // æ ¹æ®çª—è¦–çª—è¨ˆç®—åœ–ç‰‡å¤§å°
             int width = qMin(original_image.width(), this->width());
             int height = int(width * 1.0 / (original_image.width() * 1.0 / original_image.height()));
             height = qMin(height, this->height());
             width = int(height * 1.0 * (original_image.width() * 1.0 / original_image.height()));
 
-            // ²¾°Ê
+            // ç§»å‹•
             painter.translate(int(this->width() / 2 + x_pos), int(this->height() / 2 + y_pos));
 
-            // ÁY©ñ
+            // ç¸®æ”¾
             painter.scale(zoom_value, zoom_value);
 
-            // Ã¸¹Ï
+            // ç¹ªåœ–
             QRect pic_rect(-width / 2, -height / 2, width, height);
             painter.drawImage(pic_rect, this->original_image);
             break;
@@ -50,7 +50,7 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
             int center_point_y = this->height() / 2;
 
 
-            // ¹Ï¤ù¸m¤¤Åã¥Ü
+            // åœ–ç‰‡ç½®ä¸­é¡¯ç¤º
             auto match_image = [=](QImage image, int width, int height) {
                 int image_width = 0, image_height = 0;
                 float match_scale_width = float(width) / float(image.width());
@@ -61,7 +61,7 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
                 return QPoint(image_width, image_height);
             };
 
-            // µô¤ÁÁY©ñ
+            // è£åˆ‡ç¸®æ”¾
             int image_zoom_size_width = this->original_image.width() * zoom_value;
             int image_zoom_size_height = this->original_image.height() * zoom_value;
             int overflow_zoom_size_width = image_zoom_size_width - this->original_image.width();
@@ -92,7 +92,7 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
             }
 
 
-            // ®ø°£¶ÂÃä, §â¶W¥X¹Ï¤ùªº½d³òÃ¸»s¥Õ¦â
+            // æ¶ˆé™¤é»‘é‚Š, æŠŠè¶…å‡ºåœ–ç‰‡çš„ç¯„åœç¹ªè£½ç™½è‰²
             if ((overflow_zoom_size_width / 2 - x_pos) > overflow_zoom_size_width) {
                 // Crop Image Width - (Left Padding - OverFlow Width)
                 for (int index_width = crop_image.width() - ((overflow_zoom_size_width / 2 - x_pos) - overflow_zoom_size_width);
@@ -138,7 +138,7 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
                 }
             }
 
-            // Ã¸»s®É¹w¯dÃä¼e, Åı¹Ï¤ù¥i¥H¸m¤¤Åã¥Ü
+            // ç¹ªè£½æ™‚é ç•™é‚Šå¯¬, è®“åœ–ç‰‡å¯ä»¥ç½®ä¸­é¡¯ç¤º
 
             int image_padding_width = (this->width() - match_image(crop_image, this->width(), this->height()).x()) / 2;
             int image_padding_height = (this->height() - match_image(crop_image, this->width(), this->height()).y()) / 2;
@@ -152,7 +152,7 @@ void ImageViewLabel::paintEvent(QPaintEvent *event) {
 
 
 
-            //   Ã¸»s¿ï¨ú®Ø
+            //   ç¹ªè£½é¸å–æ¡†
             float match_scale_value = match_image(crop_image, this->width(), this->height()).x() / float(crop_image.width());
             QPoint rect_l((first_press_pos.x() - image_padding_width) / match_scale_value + overflow_zoom_size_width / 2 - x_pos,
                           (first_press_pos.y() - image_padding_height) / match_scale_value + overflow_zoom_size_height / 2 - y_pos) ;
@@ -200,9 +200,9 @@ void ImageViewLabel::wheelEvent(QWheelEvent *event) {
     int value = event->angleDelta().y();
     first_press_pos = QPoint();
     second_press_pos = QPoint();
-    if (value > 0)  // ©ñ¤j
+    if (value > 0)  // æ”¾å¤§
         zoom_in_image();
-    else            // ÁY¤p
+    else            // ç¸®å°
         zoom_out_image();
 }
 
@@ -250,7 +250,7 @@ void ImageViewLabel::mouseMoveEvent(QMouseEvent *event) {
 //    paintEvent(nullptr);
 }
 
-//·Æ¹«µo®g¨Æ¥ó
+//æ»‘é¼ ç™¼å°„äº‹ä»¶
 void ImageViewLabel::mouseReleaseEvent(QMouseEvent */*event*/) {
     is_pressed = false;
     switch (mouse_press_mod) {
@@ -265,13 +265,13 @@ void ImageViewLabel::mouseReleaseEvent(QMouseEvent */*event*/) {
     }
 }
 
-//¹Ï¤ù©ñ¤j
+//åœ–ç‰‡æ”¾å¤§
 void ImageViewLabel::zoom_in_image() {
     zoom_value += 0.015;
     update();
 }
 
-//¹Ï¤ùÁY¤p
+//åœ–ç‰‡ç¸®å°
 void ImageViewLabel::zoom_out_image() {
     zoom_value -= 0.015;
     if (zoom_value <= 0) {
@@ -282,7 +282,7 @@ void ImageViewLabel::zoom_out_image() {
     update();
 }
 
-//¹Ï¤ù­ì©l¤j¤p
+//åœ–ç‰‡åŸå§‹å¤§å°
 void ImageViewLabel::on_preset_image() {
     zoom_value = 1.0;
     x_pos = 0;

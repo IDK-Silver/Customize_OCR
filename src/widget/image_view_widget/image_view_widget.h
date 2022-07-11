@@ -9,7 +9,7 @@
 
 namespace MousePressEvent {
     const int MoveImage = 2;
-    const int PainterPen = 3;
+    const int PainterPen = 4;
 };
 
 class ImageViewLabel : public QLabel {
@@ -29,10 +29,10 @@ public:
 private:
     QImage original_image;
     qreal zoom_value = 1.0;
-    int x_pos = 0;              // x ¶bªº¦ì¸m
-    int y_pos = 0;              // y ªº¦ì¸m
-    QPoint old_pos;             // ¤W¤@¦¸ªº·Æ¹«¦ì¸m
-    bool is_pressed = false;    // ·Æ¹«¬O§_¦b«öÀ£
+    int x_pos = 0;              // x è»¸çš„ä½ç½®
+    int y_pos = 0;              // y çš„ä½ç½®
+    QPoint old_pos;             // ä¸Šä¸€æ¬¡çš„æ»‘é¼ ä½ç½®
+    bool is_pressed = false;    // æ»‘é¼ æ˜¯å¦åœ¨æŒ‰å£“
 
     QPoint first_press_pos;
     QPoint second_press_pos;
