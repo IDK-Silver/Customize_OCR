@@ -5,5 +5,7 @@
 #include "Global_Config.h"
 
 namespace Config::Global {
-    bool is_output_log_message = false;
+        const std::string application_name = "Customize_OCR";
+        const std::string config_name = "config";
+        bool is_output_log_message = false;
 };

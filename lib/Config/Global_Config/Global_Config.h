@@ -8,8 +8,9 @@
 #include <string>
 
 namespace Config::Global {
-    const std::string application_name = "Customize_OCR";
-    const std::string config_name = "config";
+    extern const std::string application_name;
+    extern const std::string config_name;
+    extern bool is_output_log_message;
 };
 
 
