@@ -178,8 +178,11 @@ int ImageViewLabel::get_mouse_press_event() const {
     return this->mouse_press_mod;
 }
 
-void ImageViewLabel::clear_get_select_rect() {
+void ImageViewLabel::clear_select_rect() {
+    first_press_pos = QPoint();
+    second_press_pos = QPoint();
     this->select_rect = QRect();
+    update();
 }
 
 void ImageViewLabel::display(QPaintEvent *event, int mouse_press_event) {
@@ -326,14 +329,26 @@ void ImageViewLabel::display(QPaintEvent *event, int mouse_press_event) {
 //                save_image.save("C:\\Users\\idk\\Desktop\\crop_save.jpg");
     }
 
-    // Emit Qt Signal
-    emit pos_change();
-
-
 
     painter.drawRect(QRect(first_press_pos, second_press_pos));
 
 
-    return;
+    // Emit Qt Signal
+    emit pos_change();
 }
 
+
+
+
+
+void ImageViewLabel::set_select_rect(QRect rect) {
+    this->clear_select_rect();
+
+    this->select_rect = rect;
+    update();
+}
+
+void ImageViewLabel::clear_press_pos() {
+    this->first_press_pos = QPoint(0, 0);
+    this->second_press_pos = QPoint(0, 0);
+}

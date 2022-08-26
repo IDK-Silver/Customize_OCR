@@ -18,7 +18,7 @@ public:
     ~OCR_Detect_Widget() override;
 
     Ui::OCR_Detect_Widget *ui{};
-
+    
 
 private:
     void add_list_widget_ocr_data(const OCR_Display_Data &data);

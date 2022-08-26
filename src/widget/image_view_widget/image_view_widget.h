@@ -26,20 +26,21 @@ public:
     void zoom_out_image();
     void on_preset_image();
 
-    void clear_get_select_rect();
-
+    void clear_select_rect();
+    void set_select_rect(QRect rect);
+    void clear_press_pos();
     QRect get_select_rect();
-    int get_mouse_press_event() const;
+    [[nodiscard]] int get_mouse_press_event() const;
 
 private:
     QImage original_image;
     qreal zoom_value = 1.0;
+    QPoint first_press_pos;
+    QPoint second_press_pos;
     int x_pos = 0;              // x 軸的位置
     int y_pos = 0;              // y 的位置
     QPoint old_pos;             // 上一次的滑鼠位置
     bool is_pressed = false;    // 滑鼠是否在按壓
-    QPoint first_press_pos;
-    QPoint second_press_pos;
     int mouse_press_mod = MousePressEvent::MoveImage;
     QRect select_rect;
 

@@ -49,7 +49,7 @@ set(PROJECT_SOURCES
         ${Qt_Widgets}
         ${Lib_Config}
         ${Lib_Utility}
-        )
+        src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.cpp src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h)
 
 add_executable(Customize_OCR ${PROJECT_SOURCES})
 target_link_libraries(Customize_OCR PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)

@@ -11,6 +11,8 @@
 namespace Config::Files_Path {
 
         std::string get_config_path();
+        std::string app_data_location();
+        std::string get_format_setting_folder_path();
 
 }
 
