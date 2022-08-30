@@ -352,3 +352,7 @@ void ImageViewLabel::clear_press_pos() {
     this->first_press_pos = QPoint(0, 0);
     this->second_press_pos = QPoint(0, 0);
 }
+
+QImage ImageViewLabel::get_raw_image() {
+    return this->original_image;
+}

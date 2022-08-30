@@ -32,6 +32,8 @@ public:
     QRect get_select_rect();
     [[nodiscard]] int get_mouse_press_event() const;
 
+    QImage get_raw_image();
+
 private:
     QImage original_image;
     qreal zoom_value = 1.0;
