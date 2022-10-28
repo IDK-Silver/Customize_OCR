@@ -1,0 +1,11 @@
+[requires]
+opencv/4.5.5
+
+
+[generators]
+cmake
+CMakeDeps
+CMakeToolchain
+
+[imports]
+bin, *dll -> ./bin
