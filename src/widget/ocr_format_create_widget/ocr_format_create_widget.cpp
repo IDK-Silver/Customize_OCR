@@ -53,6 +53,7 @@ void OCR_Format_Create_Widget::add_image() {
         OCR_Format_Setting setting(this->ui->image_view->get_raw_image(), this->format_list);
         setting.save_file(save_file_path);
 
+
         widget_init();
     }
 

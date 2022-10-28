@@ -48,16 +48,22 @@
      <x>0</x>
      <y>0</y>
      <width>982</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
     <property name="title">
      <string>檔案</string>
     </property>
+    <addaction name="actionOpenFIle"/>
    </widget>
    <addaction name="menu"/>
   </widget>
+  <action name="actionOpenFIle">
+   <property name="text">
+    <string>OpenFIle</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

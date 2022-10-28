@@ -21,8 +21,8 @@ public:
     Ui::OCR_Detect_Widget *ui{};
 
 
+    void action_open_file();
 
-    
 
 private:
     std::vector<std::shared_ptr<OCR_Format_Data>> ocr_format_data_list;

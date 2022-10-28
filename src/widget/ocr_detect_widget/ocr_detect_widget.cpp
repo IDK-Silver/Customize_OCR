@@ -59,3 +59,6 @@ void OCR_Detect_Widget::ocr_image() {
 
 
 
+void OCR_Detect_Widget::action_open_file() {
+    qDebug() << "OpenFile";
+}
