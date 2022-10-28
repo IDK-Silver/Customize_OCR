@@ -36,6 +36,7 @@ class OCR_Format_Setting {
             QString key = "format_data";
             QString tag_name_key = "tag";
             QString excel_key = "excel";
+            QString crop_image_rect_key = "image_rect";
         };
         Struct_data format_data;
     };
@@ -47,6 +48,9 @@ public:
     ~OCR_Format_Setting();
     bool save_file(const QString &file_path);
     void load_file(const QString &file_path);
+    std::vector<std::shared_ptr<OCR_Format_Data>> get_format_list();
+    QImage get_image();
+
 private:
     QString setting_name;
     QImage image;

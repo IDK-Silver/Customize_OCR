@@ -26,6 +26,8 @@ public:
     void zoom_out_image();
     void on_preset_image();
 
+
+    void clear();
     void clear_select_rect();
     void set_select_rect(QRect rect);
     void clear_press_pos();
@@ -59,6 +61,7 @@ protected:
     void mousePressEvent(QMouseEvent *event) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
+
 
 
 signals:
