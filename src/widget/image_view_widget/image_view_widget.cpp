@@ -17,6 +17,7 @@ ImageViewLabel::~ImageViewLabel() = default;
 
 void ImageViewLabel::read_image(const QImage &image) {
     this->original_image = image;
+    this->update();
 }
 
 
@@ -355,4 +356,18 @@ void ImageViewLabel::clear_press_pos() {
 
 QImage ImageViewLabel::get_raw_image() {
     return this->original_image;
+}
+
+void ImageViewLabel::clear() {
+    QLabel::clear();
+    original_image = QImage();
+    zoom_value = 1.0;
+    first_press_pos = QPoint();
+    second_press_pos = QPoint();
+    x_pos = 0;              // x 軸的位置
+    y_pos = 0;              // y 的位置
+    old_pos = QPoint();             // 上一次的滑鼠位置
+    is_pressed = false;    // 滑鼠是否在按壓
+    mouse_press_mod = MousePressEvent::MoveImage;
+    select_rect = QRect();
 }

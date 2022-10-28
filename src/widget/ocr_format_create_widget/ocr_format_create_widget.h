@@ -45,6 +45,7 @@ private:
 
 
 public slots:
+    void load_setting_file();
     void add_tag();
     void add_image();
     void choose_image_crop_range();

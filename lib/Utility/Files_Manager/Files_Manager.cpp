@@ -38,7 +38,7 @@ bool Files_Manager::is_exists_folder(const std::string &path) {
     }
 }
 
-// ¤£«OÃÒ¸ô®|¦s¦bªº³s±µ¤è¦¡
+// ä¸ä¿è­‰è·¯å¾‘å­˜åœ¨çš„é€£æ¥æ–¹å¼
 std::string Files_Manager::absolute_path_join(const std::string& absolute_path, const std::string& join_path) {
 
     return QString::fromStdString(absolute_path).append(QDir::separator()).append(QString::fromStdString(join_path)).toLocal8Bit().toStdString();

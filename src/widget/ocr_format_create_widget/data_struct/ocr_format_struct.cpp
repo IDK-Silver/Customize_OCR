@@ -26,12 +26,14 @@ bool OCR_Format_Setting::save_file(const QString& file_path) {
 
     QDir path (this->setting_name);
 
-    QByteArray image_data;
+
     // QImage to QByteArray
+    QByteArray image_data;
     {
         QBuffer buffer(&image_data);
         buffer.open(QIODevice::WriteOnly);
         image.save(&buffer, "PNG");
+        buffer.close();
     }
     image_data = image_data.toBase64();
 
@@ -45,6 +47,19 @@ bool OCR_Format_Setting::save_file(const QString& file_path) {
         QJsonObject format_data;
         format_data.insert(this->json_dict.format_data.tag_name_key, format->tag);
         format_data.insert(this->json_dict.format_data.excel_key, format->excel_col);
+
+        // Image Crop Rect
+        {
+            QRect rect = format->crop_rect;
+            QJsonArray image_crop_rect;
+            image_crop_rect.push_back(rect.topLeft().x());
+            image_crop_rect.push_back(rect.topLeft().y());
+            image_crop_rect.push_back(rect.bottomRight().x());
+            image_crop_rect.push_back(rect.bottomRight().y());
+            format_data.insert(this->json_dict.format_data.crop_image_rect_key, image_crop_rect);
+        }
+
+
         format_data_array.push_back(format_data);
     }
 
@@ -86,6 +101,33 @@ void OCR_Format_Setting::load_file(const QString &file_path) {
     auto byte_array_image = QByteArray::fromBase64(byte_array_image_64);
     this->image.loadFromData(byte_array_image);
 
+
+    this->format_list.clear();
+    QJsonArray format_data_array = json_doc[this->json_dict.format_data.key].toArray();
+    for (auto format : format_data_array) {
+        auto format_data = std::make_shared<OCR_Format_Data>();
+        format_data->tag = format[this->json_dict.format_data.tag_name_key].toString();
+        format_data->excel_col = format[this->json_dict.format_data.excel_key].toString();
+
+        // image crop rect
+        {
+            auto point_array = format[this->json_dict.format_data.crop_image_rect_key].toArray();
+            QRect rect(QPoint(point_array.at(0).toInt(), point_array.at(1).toInt()),
+                       QPoint(point_array.at(2).toInt(), point_array.at(3).toInt()));
+            format_data->crop_rect = rect;
+        }
+
+        format_list.push_back(format_data);
+    }
+
+}
+
+std::vector<std::shared_ptr<OCR_Format_Data>> OCR_Format_Setting::get_format_list() {
+    return this->format_list;
+}
+
+QImage OCR_Format_Setting::get_image() {
+    return this->image;
 }
 
 OCR_Format_Setting::OCR_Format_Setting() = default;
