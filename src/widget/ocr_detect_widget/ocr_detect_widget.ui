@@ -200,6 +200,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pb_choose_image">
+        <property name="text">
+         <string>選擇辨識圖片</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pb_load_setting_file">
         <property name="text">
          <string>載入設定檔</string>
