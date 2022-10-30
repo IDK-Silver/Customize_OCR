@@ -48,3 +48,6 @@ cmake-build-release-visual-studio
 CMakeLists.txt.user
 CMakeSettings.json
 
+#CMake
+*.ui.autosave
+
