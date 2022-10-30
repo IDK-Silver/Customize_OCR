@@ -44,5 +44,10 @@ namespace Config::Files_Path {
         det_path(path, Config::Global::format_setting_folder_name);
         return path.absolutePath().toLocal8Bit().toStdString();
     }
+
+    std::string get_system_picture_path() {
+        QStringList PicturesLocation = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+        return PicturesLocation.at(0).toLocal8Bit().toStdString();
+    }
 }
 

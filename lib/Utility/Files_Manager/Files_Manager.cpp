@@ -38,7 +38,7 @@ bool Files_Manager::is_exists_folder(const std::string &path) {
     }
 }
 
-// 不保證路徑存在的連接方式
+
 std::string Files_Manager::absolute_path_join(const std::string& absolute_path, const std::string& join_path) {
 
     return QString::fromStdString(absolute_path).append(QDir::separator()).append(QString::fromStdString(join_path)).toLocal8Bit().toStdString();

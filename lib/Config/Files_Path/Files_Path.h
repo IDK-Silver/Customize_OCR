@@ -9,7 +9,7 @@
 #define CUSTOMIZE_OCR_FILES_PATH_H
 
 namespace Config::Files_Path {
-
+        std::string get_system_picture_path();
         std::string get_config_path();
         std::string app_data_location();
         std::string get_format_setting_folder_path();

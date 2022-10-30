@@ -9,12 +9,15 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# using conan package manager and run conan setup
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
-# Find Qt Lib
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
+# find Qt lib
+find_package(QT NAMES Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 set(Qt_Widgets
@@ -30,10 +33,13 @@ set(Qt_Widgets
         src/widget/ocr_detect_widget/widget_item/ocr_data_widget.h
         src/widget/ocr_detect_widget/data_struct/ocr_data_struct.cpp
 
+
         src/widget/ocr_format_create_widget/ocr_format_create_widget.ui
         src/widget/ocr_format_create_widget/ocr_format_create_widget.cpp
         src/widget/ocr_format_create_widget/ocr_format_create_widget.h
-        src/widget/image_view_widget/image_view_widget.cpp src/widget/image_view_widget/image_view_widget.h)
+        src/widget/image_view_widget/image_view_widget.cpp src/widget/image_view_widget/image_view_widget.h
+        src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.cpp
+        src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h src/widget/main_window/strcut/action_enum.h)
 
 set(Lib_Config
         lib/Config/Files_Path/Files_Path.cpp
@@ -46,12 +52,12 @@ set(Lib_Utility
 
 set(PROJECT_SOURCES
         src/main.cpp
-        ${Qt_Widgets}
         ${Lib_Config}
+        ${Qt_Widgets}
         ${Lib_Utility}
-        src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.cpp src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h)
+         )
 
 add_executable(Customize_OCR ${PROJECT_SOURCES})
-target_link_libraries(Customize_OCR PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(Customize_OCR PRIVATE ${CONAN_LIBS} Qt${QT_VERSION_MAJOR}::Widgets)
 
 

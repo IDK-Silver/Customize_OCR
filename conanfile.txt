@@ -1,0 +1,15 @@
+[requires]
+libwebp/1.2.3
+libjpeg/9d
+zlib/1.2.13
+opencv/4.5.5
+
+
+
+[generators]
+cmake
+CMakeDeps
+CMakeToolchain
+
+[imports]
+bin, *dll -> ./bin
