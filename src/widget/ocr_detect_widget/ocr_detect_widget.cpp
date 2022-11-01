@@ -13,6 +13,7 @@ OCR_Detect_Widget::OCR_Detect_Widget(QWidget *parent): QWidget(parent), ui(new U
 {
     this->ui->setupUi(this);
     this->connect_setup();
+    this->ocr_processing = std::make_unique<ImageOCR>();
 }
 
 OCR_Detect_Widget::~OCR_Detect_Widget() = default;
@@ -32,6 +33,8 @@ void OCR_Detect_Widget::add_list_widget_ocr_data(const OCR_Display_Data& data) {
 
     // change widget data
     ocr_data_widget->change_tag(data.tag);
+    ocr_data_widget->change_crop_image(data.crop_image);
+    ocr_data_widget->change_ocr_text(data.ocr_text);
 }
 
 void OCR_Detect_Widget::load_setting_file() {
@@ -40,7 +43,7 @@ void OCR_Detect_Widget::load_setting_file() {
     /* get the choose file path */
     auto choose_file = QFileDialog::getOpenFileName(this, QString("選設定檔"),
                                                     QString::fromStdString(Config::Files_Path::get_format_setting_folder_path()),
-                                                    QString("設定檔 (*.json)"));
+                                                    QString("設定檔 (*.json)")).toLocal8Bit();
     /* load the setting file*/
     setting.load_file(choose_file);
 
@@ -61,12 +64,13 @@ void OCR_Detect_Widget::ocr_image() {
     }
 
     /* load image by the first index of wait ocr path list */
-    QImage ocr_image(this->wait_ocr_path_list.at(0));
+    cv::Mat  image = cv::imread(this->wait_ocr_path_list.at(0).toLocal8Bit().toStdString());
 
     /* del the front path */
     this->wait_ocr_path_list.pop_front();
 
     /* image ocr */
+    ocr_processing->set_image(image);
 
 
 
@@ -75,6 +79,7 @@ void OCR_Detect_Widget::ocr_image() {
     {
         OCR_Display_Data data;
         data.tag =  format_data->tag;
+        data.ocr_text = this->ocr_processing->ocr();
         this->add_list_widget_ocr_data(data);
     }
 }
@@ -96,11 +101,6 @@ void OCR_Detect_Widget::choose_images() {
     QStringList choose_files = QFileDialog::getOpenFileNames(this, QString("選擇圖片"),
                                                     QString::fromStdString(Config::Files_Path::get_system_picture_path()),
                                                     QString("圖片 (*.jpg *.png *tif)"));
-
-    /* to local string (to fix windows format) */
-    for (auto &path : choose_files) {
-        path = path.toLocal8Bit();
-    }
 
     this->wait_ocr_path_list = choose_files;
 }

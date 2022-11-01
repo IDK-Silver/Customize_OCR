@@ -3,8 +3,10 @@
 
 #include <QWidget>
 #include <QDebug>
+#include <memory>
 #include "data_struct/ocr_data_struct.h"
 #include "src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h"
+#include <lib/OCR/ImageOCR.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class OCR_Detect_Widget; }
@@ -30,8 +32,8 @@ public:
 private:
     void connect_setup();
 
+    std::unique_ptr<ImageOCR> ocr_processing;
     std::vector<std::shared_ptr<OCR_Format_Data>> ocr_format_data_list;
-
     QStringList wait_ocr_path_list;
 
     void add_list_widget_ocr_data(const OCR_Display_Data &data);
