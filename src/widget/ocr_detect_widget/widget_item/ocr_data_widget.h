@@ -20,6 +20,7 @@ public:
 
     void change_tag(const QString &text);
     void change_crop_image(const QImage &crop_image);
+    void change_crop_image(const QPixmap &crop_image);
     void change_ocr_text(const QString &text);
 
 

@@ -1,5 +1,6 @@
 #include "ocr_data_widget.h"
 #include "ui_ocr_data_widget.h"
+#include <lib/Utility/ImageFormat/ImageFormat.h>
 
 OCR_Data_Widget::OCR_Data_Widget(QWidget *parent) :
     QWidget(parent),
@@ -15,6 +16,10 @@ OCR_Data_Widget::~OCR_Data_Widget()
 
 void OCR_Data_Widget::change_tag(const QString &text) {
     this->ui->tag_lab->setText(text);
+}
+
+void OCR_Data_Widget::change_crop_image(const QPixmap &crop_image) {
+    this->ui->crop_image_lab->setPixmap(crop_image);
 }
 
 void OCR_Data_Widget::change_crop_image(const QImage &crop_image) {
