@@ -51,3 +51,7 @@ CMakeSettings.json
 #CMake
 *.ui.autosave
 
+#Bin
+bin
+
+*.traineddata
