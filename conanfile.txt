@@ -1,10 +1,11 @@
 [requires]
+libtiff/4.4.0
 libwebp/1.2.3
 libjpeg/9d
+libpng/1.6.38
 zlib/1.2.13
 opencv/4.5.5
-
-
+tesseract/5.2.0
 
 [generators]
 cmake
