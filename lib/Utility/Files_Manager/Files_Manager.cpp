@@ -2,13 +2,15 @@
 // Created by idk on 2022/6/9.
 //
 
-#include <QFileInfo>
-#include <QString>
-#include <QDir>
-#include <iostream>
+
 #include "Files_Manager.h"
 
 using namespace Utility;
+
+QString Files_Manager::path_combine(const QString &path1, const QString &path2)
+{
+    return QDir::cleanPath(path1 + QDir::separator() + path2);
+}
 
 bool Files_Manager::is_exists_any(const std::string& path) {
     QFileInfo check_file(QString::fromStdString(path));

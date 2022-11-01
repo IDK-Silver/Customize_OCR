@@ -6,9 +6,15 @@
 #define CUSTOMIZE_OCR_FILES_MANAGER_H
 
 #include <string>
+#include <QFileInfo>
+#include <QString>
+#include <QDir>
+#include <iostream>
 
 namespace Utility {
     namespace Files_Manager {
+
+        QString path_combine(const QString &path1, const QString &path2);
 
         bool is_exists_any(const std::string &path);
         bool is_exists_file(const std::string &path);
