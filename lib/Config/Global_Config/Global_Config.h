@@ -8,9 +8,12 @@
 #include <string>
 
 namespace Config::Global {
+    #define ProgramTest 1
+    extern const std::string bin_folder_name;
     extern const std::string application_name;
     extern const std::string config_name;
     extern const std::string format_setting_folder_name;
+    extern const std::string ocr_model_folder_name;
     extern bool is_output_log_message;
 };
 
