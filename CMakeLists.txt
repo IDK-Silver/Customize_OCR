@@ -12,6 +12,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# set path the exe run directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 # using conan package manager and run conan setup
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
@@ -48,16 +51,39 @@ set(Lib_Config
         lib/Config/Global_Config/Global_Config.h)
 
 set(Lib_Utility
-        lib/Utility/Files_Manager/Files_Manager.cpp lib/Utility/Files_Manager/Files_Manager.h)
+        lib/Utility/Files_Manager/Files_Manager.cpp)
+
+
+set(Lib_OCR
+        lib/OCR/ImageOCR.cpp lib/OCR/ImageOCR.h)
+
+set(Lib_ImageFormat
+        lib/Utility/ImageFormat/ImageFormat.cpp
+        lib/Utility/ImageFormat/ImageFormat.h)
 
 set(PROJECT_SOURCES
         src/main.cpp
         ${Lib_Config}
         ${Qt_Widgets}
         ${Lib_Utility}
+        ${Lib_OCR}
+        ${Lib_ImageFormat}
          )
 
 add_executable(Customize_OCR ${PROJECT_SOURCES})
 target_link_libraries(Customize_OCR PRIVATE ${CONAN_LIBS} Qt${QT_VERSION_MAJOR}::Widgets)
 
+
+# the executable require file
+set(BIN_NEED_FILE
+        "chi_tra.traineddata"
+        "eng.traineddata")
+
+# move ocr model to executable model folder
+foreach(file_name ${BIN_NEED_FILE})
+    add_custom_command(TARGET Customize_OCR POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${PROJECT_SOURCE_DIR}/bin/${file_name}"
+            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/model/${file_name}")
+endforeach()
 
