@@ -2,21 +2,28 @@
 // Created by idk on 2022/10/2.
 //
 
-#ifndef PPOCR_IMAGEOCR_H
-#define PPOCR_IMAGEOCR_H
-#include <opencv2/opencv.hpp>
+#ifndef CUSTOMIZE_OCR_IMAGE_OCR
+#define CUSTOMIZE_OCR_IMAGE_OCR
 #include <vector>
+#include <memory>
+#include <opencv2/opencv.hpp>
+#include <leptonica/allheaders.h>
+#include <tesseract/baseapi.h>
 #include <QImage>
+#include <lib/Config/Files_Path/Files_Path.h>
+#include <lib/Config/Global_Config/Global_Config.h>
 
 class ImageOCR {
 public:
     ImageOCR();
     ~ImageOCR();
 
-    bool add_ocr_image(QImage image);
+    void set_image(cv::Mat input_image);
+    QString ocr();
 private:
+    std::unique_ptr<tesseract::TessBaseAPI> tesseract_api;
 
 };
 
 
-#endif //PPOCR_IMAGEOCR_H
+#endif //CUSTOMIZE_OCR_IMAGE_OCR

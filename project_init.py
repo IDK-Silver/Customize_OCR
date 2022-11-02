@@ -6,7 +6,7 @@ bin_path = 'bin'
 
 bin_url = {'chi_tra.traineddata': 'https://github.com/tesseract-ocr/tessdata_best/raw/main/chi_tra.traineddata',
            'eng.traineddata': "https://github.com/tesseract-ocr/tessdata_best/raw/main/eng.traineddata"}
-
+# https://github.com/tesseract-ocr/tessdata/raw/main/chi_tra.traineddata
 
 # init project path
 def path_search():
