@@ -18,6 +18,8 @@ namespace Utility {
     Pix* QImage2Pix(QImage qImage);
     QImage Pix2QImage(Pix* pixImage);
 
+    cv::Mat MatCropByQRect(const cv::Mat&, QRect);
+
 } // Utility
 
 #endif //CUSTOMIZE_IMAGE_FORMAT

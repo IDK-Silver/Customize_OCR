@@ -19,11 +19,6 @@ OCR_Format_Setting::OCR_Format_Setting(QImage image, std::vector<std::shared_ptr
 
 bool OCR_Format_Setting::save_file(const QString& file_path) {
 
-//    if (this->image == QImage() or format_list.empty() or file_path.isEmpty()) {
-//        qDebug() << "OCR_Format_Setting->save_file : don't have format data or file path is not true";
-//        return false;
-//    }
-
     QDir path (this->setting_name);
 
 
@@ -87,6 +82,8 @@ bool OCR_Format_Setting::save_file(const QString& file_path) {
 }
 
 void OCR_Format_Setting::load_file(const QString &file_path) {
+
+    /* load json data string */
     QString json_str;
     {
         QFile file(file_path);
@@ -95,21 +92,33 @@ void OCR_Format_Setting::load_file(const QString &file_path) {
         file.close();
     }
 
+    /* decode json string to json doc */
     QJsonDocument json_doc = QJsonDocument::fromJson(json_str.toUtf8());
 
+    /* get ocr image from json doc */
     auto byte_array_image_64 = json_doc[this->json_dict.image_data_key].toVariant().toByteArray();
     auto byte_array_image = QByteArray::fromBase64(byte_array_image_64);
     this->image.loadFromData(byte_array_image);
 
-
+    /* clear old data and then load new data from load json file */
     this->format_list.clear();
+
+    /* get ocr format data from json doc */
+    /* each element in array is a tag data
+     * tag data is (tag name, excel col, image need crop range)
+     * */
     QJsonArray format_data_array = json_doc[this->json_dict.format_data.key].toArray();
+
+    /* for load each tag format form array */
     for (auto format : format_data_array) {
+
         auto format_data = std::make_shared<OCR_Format_Data>();
+
+        /* set data */
         format_data->tag = format[this->json_dict.format_data.tag_name_key].toString();
         format_data->excel_col = format[this->json_dict.format_data.excel_key].toString();
 
-        // image crop rect
+        // is part is image get the image crop range (QPoint to int)
         {
             auto point_array = format[this->json_dict.format_data.crop_image_rect_key].toArray();
             QRect rect(QPoint(point_array.at(0).toInt(), point_array.at(1).toInt()),

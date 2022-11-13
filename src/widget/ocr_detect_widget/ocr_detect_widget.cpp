@@ -3,6 +3,7 @@
 //
 
 #include <QFileDialog>
+#include <lib/Utility/ImageFormat/ImageFormat.h>
 #include "ocr_detect_widget.h"
 #include "ui_ocr_detect_widget.h"
 #include "widget_item//ocr_data_widget.h"
@@ -69,22 +70,29 @@ void OCR_Detect_Widget::ocr_image() {
     /* del the front path */
     this->wait_ocr_path_list.pop_front();
 
-    /* image ocr */
-    ocr_processing->set_image(image);
-
-
 
     /* add list widget element (the ocr data)  */
+    /* set OCR display data from OCR Format Data
+     * and add to the list widget to display in UI
+     * */
     for (const auto &format_data : this->ocr_format_data_list)
     {
         OCR_Display_Data data;
+
+        /* crop image by format crop rect*/
+        cv::Mat crop_image = Utility::MatCropByQRect(image, format_data->crop_rect);
+
+        ocr_processing->set_image(crop_image);
+
+        /* set OCR display data */
         data.tag =  format_data->tag;
         data.ocr_text = this->ocr_processing->ocr();
+        data.crop_image = Utility::Mat2QPixmap(crop_image);
         this->add_list_widget_ocr_data(data);
     }
+
+
 }
-
-
 
 void OCR_Detect_Widget::action_open_file() {
     load_setting_file();

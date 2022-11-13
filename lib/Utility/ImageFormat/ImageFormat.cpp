@@ -133,4 +133,12 @@ namespace Utility {
         return result.rgbSwapped();
     }
 
+    cv::Mat MatCropByQRect(const cv::Mat& image, QRect rect)
+    {
+        auto left = rect.topLeft();
+        qDebug() << rect.width() << " " << rect.height();
+        auto crop_image = image;
+        return crop_image(cv::Rect(left.x(), left.y(), rect.width(), rect.height()));
+    }
+
 } // Utility

@@ -37,6 +37,7 @@ void OCR_Format_Create_Widget::add_image() {
             return;
         }
         QImage image(choose_file);
+
         this->ui->image_view->read_image(image);
 
         this->is_import_image = true;
