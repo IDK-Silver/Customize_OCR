@@ -54,5 +54,5 @@ CMakeSettings.json
 #Bin
 bin
 *.traineddata
-
 cmake/*
+libraries/xlnt

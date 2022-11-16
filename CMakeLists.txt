@@ -12,9 +12,6 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-## set path the exe run directory
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
 # using conan package manager and run conan setup
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
@@ -86,19 +83,21 @@ target_link_libraries(Customize_OCR PRIVATE ${CONAN_LIBS} Qt${QT_VERSION_MAJOR}:
 # target link include to executable
 target_include_directories(Customize_OCR PRIVATE ${XLNT_INCLUDE_DIR})
 
+
 # the executable require file
 set(BIN_NEED_FILE
-        "chi_tra.traineddata"
-        "eng.traineddata"
-
+        "model/chi_tra.traineddata"
+        "model/eng.traineddata"
         )
+list(APPEND BIN_NEED_FILE "xlnt.dll")
+
 
 # move ocr model to executable model folder
 foreach(file_name ${BIN_NEED_FILE})
     add_custom_command(TARGET Customize_OCR POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${PROJECT_SOURCE_DIR}/bin/${file_name}"
-            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/model/${file_name}")
+            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${file_name}")
 endforeach()
 
 
