@@ -12,8 +12,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# set path the exe run directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+## set path the exe run directory
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # using conan package manager and run conan setup
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -21,7 +21,13 @@ conan_basic_setup()
 
 include_directories(libraries)
 
-# find Qt libraries
+# set cmake prefix path
+set(CMAKE_PREFIX_PATH cmake)
+
+# find Xlnt lib
+find_package(Xlnt)
+
+# find Qt lib
 find_package(QT NAMES Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
@@ -73,13 +79,19 @@ set(PROJECT_SOURCES
          )
 
 add_executable(Customize_OCR ${PROJECT_SOURCES})
-target_link_libraries(Customize_OCR PRIVATE ${CONAN_LIBS} Qt${QT_VERSION_MAJOR}::Widgets)
 
+# target link lib to executable
+target_link_libraries(Customize_OCR PRIVATE ${CONAN_LIBS} Qt${QT_VERSION_MAJOR}::Widgets xlnt::xlnt)
+
+# target link include to executable
+target_include_directories(Customize_OCR PRIVATE ${XLNT_INCLUDE_DIR})
 
 # the executable require file
 set(BIN_NEED_FILE
         "chi_tra.traineddata"
-        "eng.traineddata")
+        "eng.traineddata"
+
+        )
 
 # move ocr model to executable model folder
 foreach(file_name ${BIN_NEED_FILE})
@@ -88,4 +100,14 @@ foreach(file_name ${BIN_NEED_FILE})
             "${PROJECT_SOURCE_DIR}/bin/${file_name}"
             "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/model/${file_name}")
 endforeach()
+
+
+##foreach(file_name ${_IMPORT_CHECK_FILES_FOR_xlnt::xlnt})
+#    # copy xlnt DLL into xlnt.test directory
+#    add_custom_command(TARGET Customize_OCR POST_BUILD
+#            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+#            "${_IMPORT_PREFIX}/lib/xlnt.lib"
+#            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/a.dll")
+##endforeach()
+
 
