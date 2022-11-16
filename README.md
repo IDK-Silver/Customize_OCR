@@ -25,3 +25,9 @@
 3. 接下來開啟Visual Studio開啟專案資料夾，設置CMake
 點擊管理組態進入CMake設定，設定組態類型為Release否則會編譯不過，如果有把Qt設定到環境變數中Qt的路徑會自動抓取，需要手動設定的是OpenCV的路徑，把OpenCV_DIR設為 opencv_dir/build、OPEN_CV_DIR設為opencv_dir就配置完成了，可以順利編譯出執行檔。
  
+### System Path
+#### Windows 
+系統 Path 要新增 "OpenCV_DIR"，路徑為 OpenCV的安裝位置
+![Alt text](/doc/image/how-to-build-set-system-path-opencv.png)
+
+
