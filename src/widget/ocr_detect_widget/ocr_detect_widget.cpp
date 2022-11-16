@@ -6,7 +6,7 @@
 #include <Utility/ImageFormat/ImageFormat.h>
 #include "ocr_detect_widget.h"
 #include "ui_ocr_detect_widget.h"
-#include <widget_item//ocr_data_widget.h>
+#include "widget_item/ocr_data_widget.h"
 #include <Config/Files_Path/Files_Path.h>
 
 
