@@ -55,4 +55,4 @@ CMakeSettings.json
 bin
 *.traineddata
 
-cmake/*.cmake
+cmake/*
