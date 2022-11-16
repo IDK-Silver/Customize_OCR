@@ -4,7 +4,7 @@
 
 #include <string>
 #include <QStandardPaths>
-#include <lib/Utility/Files_Manager/Files_Manager.h>
+#include <Utility/Files_Manager/Files_Manager.h>
 
 #ifndef CUSTOMIZE_OCR_FILES_PATH_H
 #define CUSTOMIZE_OCR_FILES_PATH_H

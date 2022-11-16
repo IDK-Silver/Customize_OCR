@@ -3,11 +3,11 @@
 //
 
 #include <QFileDialog>
-#include <lib/Utility/ImageFormat/ImageFormat.h>
+#include <Utility/ImageFormat/ImageFormat.h>
 #include "ocr_detect_widget.h"
 #include "ui_ocr_detect_widget.h"
 #include "widget_item//ocr_data_widget.h"
-#include "lib/Config/Files_Path/Files_Path.h"
+#include <Config/Files_Path/Files_Path.h>
 
 
 OCR_Detect_Widget::OCR_Detect_Widget(QWidget *parent): QWidget(parent), ui(new Ui::OCR_Detect_Widget)
