@@ -55,7 +55,7 @@ def download_bin_file():
                     pdf.write(chunk)
 
 
-def download_lib():
+def install_lib():
     os.chdir(libraries_path)
 
     # Xlnt Build
@@ -87,5 +87,5 @@ def download_lib():
 if __name__ == "__main__":
     path_search()
     download_bin_file()
-    download_lib()
+    install_lib()
     input("Project Setup Finsh, Press any key to exit.")
