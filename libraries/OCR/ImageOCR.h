@@ -10,8 +10,8 @@
 #include <leptonica/allheaders.h>
 #include <tesseract/baseapi.h>
 #include <QImage>
-#include <lib/Config/Files_Path/Files_Path.h>
-#include <lib/Config/Global_Config/Global_Config.h>
+#include <Config/Files_Path/Files_Path.h>
+#include <Config/Global_Config/Global_Config.h>
 
 class ImageOCR {
 public:

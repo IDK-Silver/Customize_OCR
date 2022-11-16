@@ -3,9 +3,9 @@
 //
 
 #include "Files_Path.h"
-#include <lib/Utility/Files_Manager/Files_Manager.h>
+#include <Utility/Files_Manager/Files_Manager.h>
 #include <QDir>
-#include <lib/Config/Global_Config/Global_Config.h>
+#include <Config/Global_Config/Global_Config.h>
 
 
 namespace Config::Files_Path {

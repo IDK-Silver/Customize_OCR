@@ -6,7 +6,7 @@
 #include <memory>
 #include "data_struct/ocr_data_struct.h"
 #include "src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h"
-#include <lib/OCR/ImageOCR.h>
+#include <OCR/ImageOCR.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class OCR_Detect_Widget; }

@@ -19,7 +19,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-# find Qt lib
+include_directories(libraries)
+
+# find Qt libraries
 find_package(QT NAMES Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
@@ -45,21 +47,21 @@ set(Qt_Widgets
         src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h src/widget/main_window/strcut/action_enum.h)
 
 set(Lib_Config
-        lib/Config/Files_Path/Files_Path.cpp
-        lib/Config/Files_Path/Files_Path.h
-        lib/Config/Global_Config/Global_Config.cpp
-        lib/Config/Global_Config/Global_Config.h)
+        libraries/Config/Files_Path/Files_Path.cpp
+        libraries/Config/Files_Path/Files_Path.h
+        libraries/Config/Global_Config/Global_Config.cpp
+        libraries/Config/Global_Config/Global_Config.h)
 
 set(Lib_Utility
-        lib/Utility/Files_Manager/Files_Manager.cpp)
+        libraries/Utility/Files_Manager/Files_Manager.cpp)
 
 
 set(Lib_OCR
-        lib/OCR/ImageOCR.cpp lib/OCR/ImageOCR.h)
+        libraries/OCR/ImageOCR.cpp libraries/OCR/ImageOCR.h)
 
 set(Lib_ImageFormat
-        lib/Utility/ImageFormat/ImageFormat.cpp
-        lib/Utility/ImageFormat/ImageFormat.h)
+        libraries/Utility/ImageFormat/ImageFormat.cpp
+        libraries/Utility/ImageFormat/ImageFormat.h)
 
 set(PROJECT_SOURCES
         src/main.cpp
