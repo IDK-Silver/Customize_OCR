@@ -53,5 +53,6 @@ CMakeSettings.json
 
 #Bin
 bin
-
 *.traineddata
+
+cmake/*.cmake
