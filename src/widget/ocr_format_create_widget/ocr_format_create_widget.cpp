@@ -1,8 +1,8 @@
 #include "ocr_format_create_widget.h"
 #include "ui_ocr_format_create_widget.h"
 #include <QDebug>
-#include "lib/Config/Global_Config/Global_Config.h"
-#include "lib/Config/Files_Path/Files_Path.h"
+#include <Config/Global_Config/Global_Config.h>
+#include <Config/Files_Path/Files_Path.h>
 
 
 

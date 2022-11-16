@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QWheelEvent>
-#include "lib/Config/Global_Config/Global_Config.h"
+#include <Config/Global_Config/Global_Config.h>
 
 ImageViewLabel::ImageViewLabel(QWidget *parent) : QLabel(parent) {
 

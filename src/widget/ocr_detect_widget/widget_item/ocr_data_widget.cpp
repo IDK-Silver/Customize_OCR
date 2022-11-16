@@ -1,6 +1,6 @@
 #include "ocr_data_widget.h"
 #include "ui_ocr_data_widget.h"
-#include <lib/Utility/ImageFormat/ImageFormat.h>
+#include <Utility/ImageFormat/ImageFormat.h>
 
 OCR_Data_Widget::OCR_Data_Widget(QWidget *parent) :
     QWidget(parent),
