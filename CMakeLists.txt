@@ -66,6 +66,12 @@ set(Lib_ImageFormat
         libraries/Utility/ImageFormat/ImageFormat.cpp
         libraries/Utility/ImageFormat/ImageFormat.h)
 
+set(Lib_XlntControl
+        libraries/XlntControl/XlntControl.h
+        libraries/XlntControl/XlntControl.cpp
+        )
+
+
 set(PROJECT_SOURCES
         src/main.cpp
         ${Lib_Config}
@@ -73,6 +79,7 @@ set(PROJECT_SOURCES
         ${Lib_Utility}
         ${Lib_OCR}
         ${Lib_ImageFormat}
+        ${Lib_XlntControl}
          )
 
 add_executable(Customize_OCR ${PROJECT_SOURCES})
