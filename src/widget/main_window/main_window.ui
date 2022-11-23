@@ -56,12 +56,18 @@
      <string>檔案</string>
     </property>
     <addaction name="actionOpenFIle"/>
+    <addaction name="actionLoadXlxs"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <action name="actionOpenFIle">
    <property name="text">
-    <string>OpenFIle</string>
+    <string>開啟設定檔案</string>
+   </property>
+  </action>
+  <action name="actionLoadXlxs">
+   <property name="text">
+    <string>選擇寫入資料檔案</string>
    </property>
   </action>
  </widget>

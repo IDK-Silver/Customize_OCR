@@ -24,15 +24,27 @@ void MainWindow::tab_widget_init() {
     this->ui->tabWidget->addTab(ocr_format_create_widget->window(), ocr_format_create_widget->widget_name);
 }
 
+/* the function is the all action center
+ * to cll different widget function
+ * */
 void MainWindow::action_forward(ACTION_MAINWINDOWS action) {
 
+    /* get the current windows name -> check the function in each windows */
     const QString current_object = this->ui->tabWidget->currentWidget()->objectName();
 
+    /* check the menu action */
     switch (action) {
+
+        /* open setting file */
         case ACTION_MAINWINDOWS::OPEN_FILE:
             if (current_object == ocr_detect_widget->objectName())
                 ocr_detect_widget->action_open_file();
             break;
+
+        /* open xlsx file */
+        case ACTION_MAINWINDOWS::OPEN_XLSX_FILE:
+            if (current_object == ocr_detect_widget->objectName())
+                ocr_detect_widget->action_open_xlsx_file();
         default:
             break;
     }
@@ -43,8 +55,15 @@ void MainWindow::action_forward(ACTION_MAINWINDOWS action) {
 void MainWindow::setup_connect() {
 
     /* Qt action will forward to other widget by function action_forward */
+
+    /* open setting file */
     connect(this->ui->actionOpenFIle, &QAction::triggered,  [&] () {
         action_forward(ACTION_MAINWINDOWS::OPEN_FILE);
+    });
+
+    /* open xlsx file to write data */
+    connect(this->ui->actionLoadXlxs, &QAction::triggered, [&] () {
+        action_forward(ACTION_MAINWINDOWS::OPEN_XLSX_FILE);
     });
 
 

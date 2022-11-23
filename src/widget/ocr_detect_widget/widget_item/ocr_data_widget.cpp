@@ -29,3 +29,21 @@ void OCR_Data_Widget::change_crop_image(const QImage &crop_image) {
 void OCR_Data_Widget::change_ocr_text(const QString &text) {
     this->ui->ocr_text_lineEdit->setText(text);
 }
+
+void OCR_Data_Widget::change_xlsx_text(const QString &text) {
+    this->ui->xlsx_col->setText(text);
+}
+
+QString OCR_Data_Widget::get_tag() {
+    return this->ui->tag_lab->text();
+}
+
+QString OCR_Data_Widget::get_ocr_text() {
+    return this->ui->ocr_text_lineEdit->text();
+}
+
+QString OCR_Data_Widget::get_xlsx_text() {
+    return  this->ui->xlsx_col->text();
+}
+
+

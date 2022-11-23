@@ -22,7 +22,11 @@ public:
     void change_crop_image(const QImage &crop_image);
     void change_crop_image(const QPixmap &crop_image);
     void change_ocr_text(const QString &text);
+    void change_xlsx_text(const QString &text);
 
+    QString get_xlsx_text();
+    QString get_tag();
+    QString get_ocr_text();
 
 private:
     Ui::OCR_Data_Widget *ui;

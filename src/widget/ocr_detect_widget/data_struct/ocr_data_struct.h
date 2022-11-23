@@ -13,6 +13,7 @@ struct OCR_Display_Data {
     QString tag;
     QPixmap crop_image;
     QString ocr_text;
+    QString xlsx;
 };
 
 #endif //CUSTOMIZE_OCR_OCR_DATA_STRUCT_H

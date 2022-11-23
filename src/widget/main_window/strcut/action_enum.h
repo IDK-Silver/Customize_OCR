@@ -8,7 +8,8 @@
 
 enum ACTION_MAINWINDOWS
 {
-    OPEN_FILE
+    OPEN_FILE,
+    OPEN_XLSX_FILE
 };
 
 
