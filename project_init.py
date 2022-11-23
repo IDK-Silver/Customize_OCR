@@ -67,6 +67,7 @@ def install_lib():
 
     if not os.path.exists(os.path.join(libraries_path, 'xlnt', 'build')):
         os.mkdir('build')
+
     os.chdir(os.path.join(libraries_path, 'xlnt', 'build'))
     os.system('cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_BUILD_TYPE=Release ..')
     os.system('cmake --build .  -j12 --target install --config Release')
