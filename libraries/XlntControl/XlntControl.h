@@ -5,29 +5,32 @@
 #ifndef CUSTOMIZE_OCR_XLNTCONTROL_H
 #define CUSTOMIZE_OCR_XLNTCONTROL_H
 
+#include <cctype>
 #include <string>
 #include <memory>
 #include <xlnt/xlnt.hpp>
 #include <iostream>
 
-class XlntControl {
+
+std::string fuzzy_reference(const std::string& cell_string);
+
+class XlntControl : public xlnt::workbook {
+
 public:
     XlntControl() = default;
-    explicit XlntControl(const std::string& open_file_path);
     ~XlntControl() = default;
 
-    [[maybe_unused]] bool open_file(const std::string& openfile_path);
     [[maybe_unused]] void set_sheet(int index);
     [[maybe_unused]] void print();
 
-    [[maybe_unused]] int find_element_inRow(const int& row_index, const std::string& element);
-    [[maybe_unused]] int find_element_inCol(const int& col_index, const std::string& element);
+    [[maybe_unused]] int find_element_inRow(const unsigned int& row_index, const std::string& element);
+    [[maybe_unused]] int find_element_inCol(const unsigned int& col_index, const std::string& element);
 
-    void write_data(const int& row, const int& col, const std::string& data);
-    void save_file(const std::string& file_path);
-private:
-    std::shared_ptr<xlnt::workbook> workbook;
+    void write_data(const unsigned int& col, const unsigned int& row, const std::string& data);
+
     xlnt::worksheet sheet;
+
+private:
 
 };
 

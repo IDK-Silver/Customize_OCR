@@ -5,14 +5,23 @@
 #include "XlntControl.h"
 
 
-XlntControl::XlntControl(const std::string& open_file_path) {
-    this->workbook = std::make_shared<xlnt::workbook>();
-    workbook->load(open_file_path);
-}
 
-[[maybe_unused]] bool XlntControl::open_file(const std::string &openfile_path) {
-    this->workbook->load(openfile_path);
-    return true;
+std::string fuzzy_reference(const std::string& cell_string)
+{
+    bool is_pha = true;
+    for (const auto &word : cell_string)
+    {
+        if (isdigit(word))
+        {
+            is_pha = false;
+            break;
+        }
+    }
+    if (is_pha)
+    {
+        return  std::string(cell_string).append("0");
+    }
+    return  cell_string;
 }
 
 void XlntControl::print() {
@@ -29,10 +38,10 @@ void XlntControl::print() {
 }
 
 void XlntControl::set_sheet(int index) {
-    sheet = this->workbook->sheet_by_index(index);
+    sheet = this->sheet_by_index(index);
 }
 
-int XlntControl::find_element_inRow(const int& row_index, const std::string &element) {
+int XlntControl::find_element_inRow(const unsigned int& row_index, const std::string &element) {
     int index = 0;
     int col_index = 0;
     for (const auto& cell_vec : sheet)
@@ -53,7 +62,7 @@ int XlntControl::find_element_inRow(const int& row_index, const std::string &ele
     return -1;
 }
 
-int XlntControl::find_element_inCol(const int& col_index, const std::string& element) {
+int XlntControl::find_element_inCol(const unsigned int& col_index, const std::string& element) {
     int row_index = 0;
     for (const auto& cell_vec : sheet)
     {
@@ -74,12 +83,8 @@ int XlntControl::find_element_inCol(const int& col_index, const std::string& ele
     return -1;
 }
 
-void XlntControl::write_data(const int& row, const int& col, const std::string& data)
+void XlntControl::write_data(const unsigned int& col, const unsigned int& row, const std::string& data)
 {
-    this->sheet.cell(row + 1, col + 1).value(data);
+    this->sheet.cell(col + 1, row + 1).value(data);
 }
 
-
-void XlntControl::save_file(const std::string &file_path) {
-    this->workbook->save(file_path);
-}
