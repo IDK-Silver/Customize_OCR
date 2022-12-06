@@ -1,4 +1,5 @@
 [requires]
+openjpeg/2.4.0
 libtiff/4.4.0
 libwebp/1.2.3
 libjpeg/9d
@@ -11,6 +12,9 @@ tesseract/5.2.0
 cmake
 CMakeDeps
 CMakeToolchain
+
+[options]
+opencv:with_jpeg2000 = openjpeg
 
 [imports]
 bin, *dll -> ./bin
