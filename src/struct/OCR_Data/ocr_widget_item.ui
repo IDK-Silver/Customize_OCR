@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OCR_Data_ListWidget</class>
- <widget class="QWidget" name="OCR_Data_ListWidget">
+ <class>OCR_Data_Item</class>
+ <widget class="QWidget" name="OCR_Data_Item">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -74,7 +74,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="xlsx_col">
+      <widget class="QLabel" name="xlsx_cell_lab">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
          <horstretch>0</horstretch>
