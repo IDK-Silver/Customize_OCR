@@ -36,10 +36,10 @@ set(Qt_Widgets
         src/widget/ocr_detect_widget/ocr_detect_widget.ui
         src/widget/ocr_detect_widget/ocr_detect_widget.cpp
         src/widget/ocr_detect_widget/ocr_detect_widget.h
-        src/widget/ocr_detect_widget/widget_item/ocr_data_widget.ui
-        src/widget/ocr_detect_widget/widget_item/ocr_data_widget.cpp
-        src/widget/ocr_detect_widget/widget_item/ocr_data_widget.h
-        src/widget/ocr_detect_widget/data_struct/ocr_data_struct.cpp
+#        src/widget/ocr_detect_widget/widget_item/ocr_data_widget.ui
+#        src/widget/ocr_detect_widget/widget_item/ocr_data_widget.cpp
+#        src/widget/ocr_detect_widget/widget_item/ocr_data_widget.h
+#        src/widget/ocr_detect_widget/data_struct/ocr_data_struct.cpp
 
 
         src/widget/ocr_format_create_widget/ocr_format_create_widget.ui
@@ -47,7 +47,8 @@ set(Qt_Widgets
         src/widget/ocr_format_create_widget/ocr_format_create_widget.h
         src/widget/image_view_widget/image_view_widget.cpp src/widget/image_view_widget/image_view_widget.h
         src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.cpp
-        src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h src/widget/main_window/strcut/action_enum.h)
+        src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h
+        src/widget/main_window/strcut/action_enum.h)
 
 set(Lib_Config
         libraries/Config/Files_Path/Files_Path.cpp
@@ -72,8 +73,15 @@ set(Lib_XlntControl
         )
 
 
+set(SRC_Struct
+        src/struct/OCR_Data/OCR_Data_ListWidget.cpp
+        src/struct/OCR_Data/OCR_Data_ListWidget.h
+        src/struct/OCR_Data/ocr_widget_item.ui
+        )
+
 set(PROJECT_SOURCES
         src/main.cpp
+        ${SRC_Struct}
         ${Lib_Config}
         ${Qt_Widgets}
         ${Lib_Utility}
