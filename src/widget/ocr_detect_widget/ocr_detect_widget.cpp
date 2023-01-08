@@ -20,30 +20,6 @@ OCR_Detect_Widget::OCR_Detect_Widget(QWidget *parent): QWidget(parent), ui(new U
 
 OCR_Detect_Widget::~OCR_Detect_Widget() = default;
 
-
-//void OCR_Detect_Widget::add_list_widget_ocr_data(const OCR_Display_Data& data) {
-//
-//    // create widget and add to list_widget
-////    auto ocr_data_widget = new OCR_Data_ListWidget(this);
-//    auto ocr_data_widget = std::make_shared<OCR_Data_ListWidget>(this);
-//
-//    ocr_data_widget_list.push_back(ocr_data_widget);
-//
-//    auto item = new QListWidgetItem();
-//    ui->listWidget->setViewMode(QListView::ListMode);
-//
-//    // set widget height size
-//    item->setSizeHint(QSize(0, 100));
-//    this->ui->listWidget->addItem(item);
-//    this->ui->listWidget->setItemWidget(item, ocr_data_widget.get());
-//
-//    // change widget data
-//    ocr_data_widget->change_tag(data.tag);
-//    ocr_data_widget->change_crop_image(data.crop_image);
-//    ocr_data_widget->change_ocr_text(data.ocr_text);
-//    ocr_data_widget->change_xlsx_text(data.xlsx);
-//}
-
 void OCR_Detect_Widget::load_setting_file() {
     auto choose_file = QFileDialog::getOpenFileName(this, QString("選設定檔"),
                                                     QString::fromStdString(Config::Files_Path::get_format_setting_folder_path()),
@@ -126,36 +102,50 @@ void OCR_Detect_Widget::choose_images() {
 
 void OCR_Detect_Widget::write_xlsx_data() {
 
-
+    /* if noting to write then pass */
+    if (this->ui->listWidget->size() == 0)
+        return;
 
     /* get data form list widget */
-//    for (const auto& data_widget : this->ocr_data_widget_list)
-//    {
-//        unsigned int max_row = this->x_c->sheet.highest_row();
-//        QString ocr_text = data_widget->get_ocr_text();
-//        QString tag_name = data_widget->get_tag();
-//        QString xlsx_col = data_widget->get_xlsx_text();
-//
-//
-//        /* conversion xlsx to program index  */
-//        xlnt::cell_reference ce(fuzzy_reference(xlsx_col.toLocal8Bit().toStdString()));
-//
-////        qDebug() << ce.column().index;
-//
-//        /* find the xlsx col index
-//         * to write a new data
-//         * */
-//
-//
-//        this->x_c->write_data(ce.column().index - 1, max_row - 1, ocr_text.toLocal8Bit().toStdString());
-//
-////
-////        this->x_c->find_element_inCol(ce.column_index() - 1, "");
-//
-//    }
+    for (int data_widget_index = 0; data_widget_index < this->ui->listWidget->size(); data_widget_index++)
+    {
+        /* load the data widget from list widget item */
+        auto data_widget = this->ui->listWidget->at(data_widget_index);
 
-    x_c->save("after_write_data.xlsx");
+        /* the get each data from data widget */
+        OCR_Data ocr_data;
+        ocr_data.ocr_text = data_widget->ui->ocr_text_lineEdit->text();
+        ocr_data.tag = data_widget->ui->tag_lab->text();
+        ocr_data.xlsx_cell = data_widget->ui->xlsx_cell_lab->text();
 
 
+        /* conversion xlsx to program index  */
+        xlnt::cell_reference ce(fuzzy_reference(ocr_data.xlsx_cell.toLocal8Bit().toStdString()));
+
+        /* to print the write data info */
+        if (Config::Global::is_output_log_message)
+        {
+            qDebug() << "Write Xlsx Data at : ";
+            qDebug() << "Col   : " << ce.column().index - 1;
+            qDebug() << "ROW   : " << x_c->next_row_index;
+            qDebug() << "Value : " << ocr_data.ocr_text;
+        }
+
+        // the mode search
+        /* find the xlsx col index
+         * to write a new data
+         * */
+
+
+
+        /* to write the data to xlsx data */
+        this->x_c->write_data(ce.column_index() - 1, x_c->next_row_index - 1, ocr_data.ocr_text.toStdString());
+    }
+    x_c->next_row_index++;
+
+    if (Config::Global::is_output_log_message)
+        qDebug() << "write end.";
+
+    x_c->save("Test.xlsx");
 }
 
