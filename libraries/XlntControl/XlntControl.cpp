@@ -39,6 +39,7 @@ void XlntControl::print() {
 
 void XlntControl::set_sheet(int index) {
     sheet = this->sheet_by_index(index);
+    this->next_row_index = this->sheet.highest_row() + 1;
 }
 
 int XlntControl::find_element_inRow(const unsigned int& row_index, const std::string &element) {
@@ -86,5 +87,6 @@ int XlntControl::find_element_inCol(const unsigned int& col_index, const std::st
 void XlntControl::write_data(const unsigned int& col, const unsigned int& row, const std::string& data)
 {
     this->sheet.cell(col + 1, row + 1).value(data);
+    this->next_row_index = row + 1;
 }
 

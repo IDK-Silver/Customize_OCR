@@ -29,6 +29,7 @@ public:
     void write_data(const unsigned int& col, const unsigned int& row, const std::string& data);
 
     xlnt::worksheet sheet;
+    unsigned int next_row_index = 0;
 
 private:
 
