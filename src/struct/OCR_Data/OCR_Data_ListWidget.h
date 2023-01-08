@@ -11,6 +11,7 @@
 #include <QImage>
 #include <QWidget>
 #include <QListWidget>
+#include "ui_ocr_widget_item.h"
 
 
 namespace Ui {
@@ -30,14 +31,16 @@ struct OCR_Data {
 class OCR_Data_ListItem : public QWidget {
     Q_OBJECT
 public:
+
     explicit OCR_Data_ListItem(QWidget *parent = nullptr);
     void copy_from(const std::shared_ptr<OCR_Data>& data);
     ~OCR_Data_ListItem() override;
     std::shared_ptr<OCR_Data> ocr_data;
     void refresh_widget_data();
+    Ui::OCR_Data_Item *ui;
 
 private:
-    Ui::OCR_Data_Item *ui;
+
 };
 
 
@@ -71,6 +74,10 @@ public:
     QImage get_image();
 
     size_t size();
+
+    bool empty();
+
+    void clear();
 
 private:
     JsonDict json_dict;
