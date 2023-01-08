@@ -1,10 +1,9 @@
 #ifndef OCR_FORMAT_CREATE_WIDGET_H
 #define OCR_FORMAT_CREATE_WIDGET_H
 
-
 #include <QWidget>
 #include <QtWidgets/QFileDialog>
-#include <src/widget/ocr_format_create_widget/data_struct/ocr_format_struct.h>
+#include <src/struct/OCR_Data/OCR_Data_ListWidget.h>
 #include <memory>
 #include <vector>
 
@@ -23,17 +22,16 @@ public:
     Ui::OCR_Format_Create_Widget *ui;
     QString widget_name = "Format Create Widget";
 
-
-
 private:
 
     bool is_crop_image_range = false;
     bool is_import_image = false;
 
 
-    std::shared_ptr<OCR_Format_Data> now_edit_format;
-    std::vector<std::shared_ptr<OCR_Format_Data>> format_list;
+    std::shared_ptr<OCR_Data> now_edit_format;
+    OCR_Data_List ocr_data_list;
     int now_edit_format_index = 0;
+
 
     [[nodiscard]] QRect get_crop_image_rect() const;
 

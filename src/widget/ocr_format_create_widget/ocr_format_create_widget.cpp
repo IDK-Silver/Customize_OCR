@@ -51,9 +51,7 @@ void OCR_Format_Create_Widget::add_image() {
                                                            QString::fromStdString(Config::Files_Path::get_format_setting_folder_path()),
                                                            QString("設定檔 (*.json)"));
 
-        OCR_Format_Setting setting(this->ui->image_view->get_raw_image(), this->format_list);
-        setting.save_file(save_file_path);
-
+        ocr_data_list.save_file(save_file_path);
 
         widget_init();
     }
@@ -99,28 +97,32 @@ void OCR_Format_Create_Widget::add_tag() {
         return;
     }
 
-    auto format = std::make_shared<OCR_Format_Data>();
-    format->crop_rect = this->get_crop_image_rect();
-    format->tag = this->ui->le_tag_name->text();
-    format->excel_col = this->ui->le_excel_col->text();
+    auto ocr_data = std::make_shared<OCR_Data>();
+
+
+    ocr_data->crop_rect = this->get_crop_image_rect();
+    ocr_data->tag = this->ui->le_tag_name->text();
+    ocr_data->xlsx_cell = this->ui->le_excel_col->text();
 
     // create first tag
-    if (format_list.empty() and now_edit_format == nullptr) {
-        now_edit_format = format;
-        format_list.push_back(format);
+    if (ocr_data_list.empty() and now_edit_format == nullptr) {
+        now_edit_format = ocr_data;
+        ocr_data_list.push_back(ocr_data);
     }
+
     // edit format
-    else if (not format_list.empty() and now_edit_format->tag == format->tag) {
+    else if (not ocr_data_list.empty() and now_edit_format->tag == ocr_data->tag) {
         if (now_edit_format != nullptr) {
-            format_list.at(now_edit_format_index) = format;
-            this->now_edit_format = format;
+            ocr_data_list.at(now_edit_format_index) = ocr_data;
+            this->now_edit_format = ocr_data;
         }
     }
+
     // add other tag
     else
     {
-        this->format_list.push_back(format);
-        this->now_edit_format = format;
+        this->ocr_data_list.push_back(ocr_data);
+        this->now_edit_format = ocr_data;
         this->tag_choose_refresh();
         this->now_edit_format_index = this->ui->cb_tage_choose->count() - 1;
     }
@@ -136,8 +138,10 @@ QRect OCR_Format_Create_Widget::get_crop_image_rect() const {
 
 void OCR_Format_Create_Widget::tag_choose_refresh() {
     this->ui->cb_tage_choose->clear();
-    for (const auto& format : this->format_list) {
-        this->ui->cb_tage_choose->addItem(format->tag);
+
+    for (int index = 0; index < ocr_data_list.size(); index++)
+    {
+        this->ui->cb_tage_choose->addItem(ocr_data_list.at(index)->tag);
     }
 }
 
@@ -146,10 +150,10 @@ void OCR_Format_Create_Widget::cb_tag_choose_index_change(int index) {
     if (index < 0)
         return;
 
-    auto format = format_list.at(index);
+    auto format = ocr_data_list.at(index);
     change_image_crop_label(format->crop_rect);
     this->ui->le_tag_name->setText(format->tag);
-    this->ui->le_excel_col->setText(format->excel_col);
+    this->ui->le_excel_col->setText(format->xlsx_cell);
     le_tag_name_change(this->ui->le_tag_name->text());
 }
 
@@ -165,7 +169,7 @@ void OCR_Format_Create_Widget::widget_init() {
     this->ui->image_view->clear();
     this->ui->pb_add_setting_file->setText("新增設定檔");
     this->ui->pb_load_setting_file->setText("載入設定檔");
-    this->format_list.clear();
+    this->ocr_data_list.clear();
     this->now_edit_format = nullptr;
     this->now_edit_format_index = 0;
     this->is_import_image = false;
@@ -207,16 +211,14 @@ void OCR_Format_Create_Widget::load_setting_file() {
             return;
         }
 
-        OCR_Format_Setting setting;
-        setting.load_file(choose_file);
-        this->format_list = setting.get_format_list();
+        this->ocr_data_list.load_file(choose_file);
 
-        if (not format_list.empty())
-            this->now_edit_format = this->format_list.at(0);
+        if (not ocr_data_list.empty())
+            this->now_edit_format = this->ocr_data_list.at(0);
 
         now_edit_format_index = 0;
 
-        QImage image = setting.get_image();
+        QImage image = ocr_data_list.get_image();
         this->ui->image_view->read_image(image);
 
         this->is_import_image = true;
