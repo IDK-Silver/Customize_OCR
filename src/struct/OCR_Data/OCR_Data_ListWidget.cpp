@@ -150,6 +150,14 @@ size_t OCR_Data_List::size() {
     return this->format_list.size();
 }
 
+bool OCR_Data_List::empty() {
+    return this->format_list.empty();
+}
+
+void OCR_Data_List::clear() {
+    this->format_list.clear();
+}
+
 OCR_Data_ListWidget::OCR_Data_ListWidget(QWidget *parent) : QListWidget(parent) {
 
 }
