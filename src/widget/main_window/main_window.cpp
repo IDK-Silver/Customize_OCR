@@ -2,16 +2,23 @@
 // Created by idk on 2022/5/24.
 //
 
+#include <Config/Files_Path/Files_Path.h>
 #include "main_window.h"
 #include "./ui_main_window.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+    // init widget object
     this->ui->setupUi(this);
 
+    // to init all tab widget - create each widget object and add to tab widget
     this->tab_widget_init();
+
+    // set this widget Qt connect
     this->setup_connect();
 
+    // to check program path is existed
+    Config::Files_Path::get_config_path();
 }
 
 void MainWindow::tab_widget_init() {
