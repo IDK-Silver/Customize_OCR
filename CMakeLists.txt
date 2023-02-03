@@ -13,8 +13,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # using conan package manager and run conan setup
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+ conan_basic_setup()
 
 include_directories(libraries)
 
@@ -54,7 +54,9 @@ set(Lib_Config
         libraries/Config/Files_Path/Files_Path.cpp
         libraries/Config/Files_Path/Files_Path.h
         libraries/Config/Global_Config/Global_Config.cpp
-        libraries/Config/Global_Config/Global_Config.h)
+        libraries/Config/Global_Config/Global_Config.h
+        libraries/Config/Widget_Config/Widget_Config.cpp
+        libraries/Config/Widget_Config/Widget_Config.h)
 
 set(Lib_Utility
         libraries/Utility/Files_Manager/Files_Manager.cpp)
@@ -79,6 +81,8 @@ set(SRC_Struct
         src/struct/OCR_Data/ocr_widget_item.ui
         )
 
+
+
 set(PROJECT_SOURCES
         src/main.cpp
         ${SRC_Struct}
@@ -88,7 +92,7 @@ set(PROJECT_SOURCES
         ${Lib_OCR}
         ${Lib_ImageFormat}
         ${Lib_XlntControl}
-         )
+        libraries/Config/Widget_Config/Widget_Config.cpp libraries/Config/Widget_Config/Widget_Config.h)
 
 add_executable(Customize_OCR ${PROJECT_SOURCES})
 
