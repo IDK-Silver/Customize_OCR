@@ -22,10 +22,8 @@ namespace Config::Files_Path {
 
     std::string get_config_path()
     {
-        auto AppDataLocation = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
-        auto system_app_config_path = AppDataLocation.at(0).toLocal8Bit();
-        QDir path(system_app_config_path);
-        path.cd("..");
+        QDir config_path = QString::fromStdString(app_data_location());
+        QDir path(config_path);
 
         det_path(path, Config::Global::application_name);
         det_path(path, Config::Global::config_name);
