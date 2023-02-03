@@ -15,6 +15,7 @@ namespace Config::Global {
     extern const std::string format_setting_folder_name;
     extern const std::string ocr_model_folder_name;
     extern bool is_output_log_message;
+    extern const bool is_output_io_error_message;
 };
 
 

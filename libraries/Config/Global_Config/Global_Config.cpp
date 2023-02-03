@@ -9,6 +9,7 @@ namespace Config::Global {
         const std::string config_name = "config";
         extern const std::string bin_folder_name = "bin";
         extern const std::string format_setting_folder_name = "formats";
-        bool is_output_log_message = false;
+        bool is_output_log_message = true;
         extern const std::string ocr_model_folder_name="model";
+        extern const bool is_output_io_error_message = true;
 };
