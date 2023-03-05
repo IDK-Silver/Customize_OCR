@@ -24,17 +24,19 @@ namespace Config::Files_Path {
     {
         QDir config_path = QString::fromStdString(app_data_location());
         QDir path(config_path);
-
-        det_path(path, Config::Global::application_name);
         det_path(path, Config::Global::config_name);
         return path.absolutePath().toLocal8Bit().toStdString();
     }
 
 
     std::string app_data_location() {
-        auto AppDataLocation = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
-        auto system_app_config_path = AppDataLocation.at(0).toLocal8Bit();
-        QDir path(system_app_config_path);
+        auto AppDataLocation = QStandardPaths::standardLocations(QStandardPaths::AppDataLocation).first();
+        QDir path(AppDataLocation);
+        auto path_lis = Utility::Files_Manager::directory_list(path.absolutePath());
+        if (path_lis.at(path_lis.size() - 1).toStdString() != Config::Global::application_name)
+        {
+            det_path(path, Config::Global::application_name);
+        }
         return path.absolutePath().toLocal8Bit().toStdString();
     }
 
