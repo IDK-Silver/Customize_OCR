@@ -16,6 +16,8 @@ OCR_Detect_Widget::OCR_Detect_Widget(QWidget *parent): QWidget(parent), ui(new U
     this->ocr_data_list = std::make_shared<OCR_Data_List>();
     this->ocr_processing = std::make_unique<ImageOCR>();
     this->x_c = std::make_shared<XlntControl>();
+
+    this->widget_init();
 }
 
 OCR_Detect_Widget::~OCR_Detect_Widget() = default;
@@ -81,6 +83,7 @@ void OCR_Detect_Widget::action_open_xlsx_file() {
     /* load the xlsx file*/
     x_c->load(choose_file.toStdString());
     x_c->set_sheet(0);
+    x_c->file_path = choose_file.toStdString();
     QMessageBox::information(nullptr, "開啟XLSX檔案成功", "以載入XLSX");
 }
 
@@ -90,6 +93,7 @@ void OCR_Detect_Widget::connect_setup() {
     connect(this->ui->pb_star_ocr, SIGNAL(clicked()), SLOT(ocr_image()));
     connect(this->ui->pb_choose_image, SIGNAL(clicked()), SLOT(choose_images()));
     connect(this->ui->pb_write_xlsx, SIGNAL(clicked()), SLOT(write_xlsx_data()));
+    connect(this->ui->cm_write_mode, SIGNAL(currentIndexChanged(int)), SLOT(xlsx_write_mode_change(int)));
 }
 
 void OCR_Detect_Widget::choose_images() {
@@ -106,46 +110,107 @@ void OCR_Detect_Widget::write_xlsx_data() {
     if (this->ui->listWidget->size() == 0)
         return;
 
+    // load the widget config to read the xlsx write mode
+    Config::AppConfig::OCRDetectWidgetConfig widget_config;
+
     /* get data form list widget */
-    for (int data_widget_index = 0; data_widget_index < this->ui->listWidget->size(); data_widget_index++)
+    if (widget_config.get_xlsx_write_mode() == widget_config.XlsxOption.WriteMode.add)
     {
-        /* load the data widget from list widget item */
-        auto data_widget = this->ui->listWidget->at(data_widget_index);
-
-        /* the get each data from data widget */
-        OCR_Data ocr_data;
-        ocr_data.ocr_text = data_widget->ui->ocr_text_lineEdit->text();
-        ocr_data.tag = data_widget->ui->tag_lab->text();
-        ocr_data.xlsx_cell = data_widget->ui->xlsx_cell_lab->text();
-
-
-        /* conversion xlsx to program index  */
-        xlnt::cell_reference ce(fuzzy_reference(ocr_data.xlsx_cell.toLocal8Bit().toStdString()));
-
-        /* to print the write data info */
-        if (Config::Global::is_output_log_message)
+        for (int data_widget_index = 0; data_widget_index < this->ui->listWidget->size(); data_widget_index++)
         {
-            qDebug() << "Write Xlsx Data at : ";
-            qDebug() << "Col   : " << ce.column().index - 1;
-            qDebug() << "ROW   : " << x_c->next_row_index;
-            qDebug() << "Value : " << ocr_data.ocr_text;
+            /* load the data widget from list widget item */
+            auto data_widget = this->ui->listWidget->at(data_widget_index);
+
+            /* the get each data from data widget */
+            OCR_Data ocr_data;
+            ocr_data.ocr_text = data_widget->ui->ocr_text_lineEdit->text();
+            ocr_data.tag = data_widget->ui->tag_lab->text();
+            ocr_data.xlsx_cell = data_widget->ui->xlsx_cell_lab->text();
+
+            /* conversion xlsx to program index  */
+            xlnt::cell_reference ce(fuzzy_reference(ocr_data.xlsx_cell.toLocal8Bit().toStdString()));
+
+            /* to print the write data info */
+            if (Config::Global::is_output_log_message)
+            {
+                qDebug() << "Write Xlsx Data at : ";
+                qDebug() << "Col   : " << ce.column().index - 1;
+                qDebug() << "ROW   : " << this->x_c->max_row_cursor;
+                qDebug() << "Value : " << ocr_data.ocr_text;
+            }
+
+            /* to write the data to xlsx data */
+            this->x_c->write_data(ce.column_index() - 1, this->x_c->max_row_cursor, ocr_data.ocr_text.toStdString());
         }
-
-        // the mode search
-        /* find the xlsx col index
-         * to write a new data
-         * */
-
-
-
-        /* to write the data to xlsx data */
-        this->x_c->write_data(ce.column_index() - 1, x_c->next_row_index - 1, ocr_data.ocr_text.toStdString());
+        this->x_c->max_row_cursor++;
     }
-    x_c->next_row_index++;
+    else if (widget_config.get_xlsx_write_mode() == widget_config.XlsxOption.WriteMode.replace)
+    {
+        for (int data_widget_index = 0; data_widget_index < this->ui->listWidget->size(); data_widget_index++)
+        {
+            /* load the data widget from list widget item */
+            auto data_widget = this->ui->listWidget->at(data_widget_index);
+
+            /* the get each data from data widget */
+            OCR_Data ocr_data;
+            ocr_data.ocr_text = data_widget->ui->ocr_text_lineEdit->text();
+            ocr_data.tag = data_widget->ui->tag_lab->text();
+            ocr_data.xlsx_cell = data_widget->ui->xlsx_cell_lab->text();
+
+
+        }
+    }
 
     if (Config::Global::is_output_log_message)
         qDebug() << "write end.";
 
-    x_c->save("Test.xlsx");
+    x_c->save(x_c->file_path);
+}
+
+void OCR_Detect_Widget::widget_init() {
+    // read config to change widget object option
+    Config::AppConfig::OCRDetectWidgetConfig config;
+    if (config.get_xlsx_write_mode() == config.XlsxOption.WriteMode.add)
+    {
+        this->ui->cm_write_mode->setCurrentIndex(0);
+    }
+//    else if (config.get_xlsx_write_mode() == config.XlsxOption.WriteMode.replace)
+//    {
+//        this->ui->cm_write_mode->setCurrentIndex(1);
+//    }
+//    else
+//    {
+//        if (Config::Global::is_output_io_error_message)
+//        {
+//            std::cerr << "Can't read config setting - Xlsx Option - Unknown" << std::endl;
+//        }
+//        this->ui->cm_write_mode->setCurrentIndex(0);
+//    }
+}
+
+void OCR_Detect_Widget::xlsx_write_mode_change(int index) {
+
+    // print the change index
+    if (Config::Global::is_output_log_message)
+    {
+        qDebug() << "Change Xlsx write mode to index : "<< index;
+    }
+
+    Config::AppConfig::OCRDetectWidgetConfig config;
+    QString select_mode;
+    switch (index) {
+        case 0:
+            select_mode = config.XlsxOption.WriteMode.add;
+            break;
+
+        case 1:
+            select_mode = config.XlsxOption.WriteMode.replace;
+            break;
+
+        default:
+            break;
+    }
+
+    config.set_xlsx_write_mode(select_mode);
 }
 

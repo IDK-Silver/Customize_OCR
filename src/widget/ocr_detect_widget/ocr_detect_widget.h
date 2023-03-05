@@ -8,6 +8,7 @@
 #include <OCR/ImageOCR.h>
 #include <XlntControl/XlntControl.h>
 #include <src/struct/OCR_Data/OCR_Data_ListWidget.h>
+#include <Config/Widget_Config/Widget_Config.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class OCR_Detect_Widget; }
@@ -32,17 +33,20 @@ public:
 
 private:
     void connect_setup();
-
+    void widget_init();
     std::unique_ptr<ImageOCR> ocr_processing;
     std::shared_ptr<OCR_Data_List> ocr_data_list;
     QStringList wait_ocr_path_list;
     std::shared_ptr<XlntControl> x_c;
+
+
 
 private slots:
     void load_setting_file();
     void ocr_image();
     void choose_images();
     void write_xlsx_data();
+    void xlsx_write_mode_change(int index);
 
 
 };
