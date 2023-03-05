@@ -57,3 +57,26 @@ bool Files_Manager::mkdir(const std::string &path, const std::string &folder_nam
 
     return q_dir.mkdir(QString::fromStdString(folder_name));
 }
+
+QStringList Files_Manager::directory_list(const QString &str) {
+    QStringList split_list;
+    QString string;
+    for (const auto & word : str)
+    {
+        if (word.isLetter() || word == '_')
+        {
+            string.append(word);
+        }
+        else
+        {
+            if (!string.isEmpty())
+                split_list.append(string);
+            string.clear();
+        }
+    }
+
+    if (!string.isEmpty())
+        split_list.append(string);
+
+    return split_list;
+}

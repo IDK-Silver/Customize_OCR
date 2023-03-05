@@ -24,6 +24,8 @@ namespace Utility {
 //        bool mkdir(const std::string &absolute_folder_path);
 
         std::string absolute_path_join(const std::string& absolute_path, const std::string& join_path);
+
+        QStringList directory_list(const QString& str);
     };
 };
 
