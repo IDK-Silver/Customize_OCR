@@ -9,22 +9,30 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
+set(MSYS ON)
+set(CONAN OFF)
+
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# using conan package manager and run conan setup
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
+
+if (MSYS)
+    set(MSYS2_ROOT_PATH "C:/Users/idk/opt/msys64")
+    set(CMAKE_PREFIX_PATH "${MSYS2_ROOT_PATH}/mingw64/lib/cmake")
+    link_directories("${MSYS2_ROOT_PATH}/mingw64/lib")
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
+elseif (CONAN)
+        # using conan package manager and run conan setup
+        include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+        conan_basic_setup()
+endif()
 
 include_directories(libraries)
 
-# set cmake prefix path
-set(CMAKE_PREFIX_PATH cmake)
+find_package(OpenCV)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
-# find Xlnt lib
-find_package(Xlnt)
-
-# find Qt lib
 find_package(QT NAMES Qt6 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
@@ -72,8 +80,14 @@ set(Lib_XlntControl
         )
 
 
+set(SRC_Struct
+        src/struct/OCR_Data/OCR_Data.cpp
+        src/struct/OCR_Data/OCR_Data.h
+        )
+
 set(PROJECT_SOURCES
         src/main.cpp
+        ${SRC_Struct}
         ${Lib_Config}
         ${Qt_Widgets}
         ${Lib_Utility}
@@ -84,11 +98,12 @@ set(PROJECT_SOURCES
 
 add_executable(Customize_OCR ${PROJECT_SOURCES})
 
-# target link lib to executable
-target_link_libraries(Customize_OCR PRIVATE ${CONAN_LIBS} Qt${QT_VERSION_MAJOR}::Widgets xlnt::xlnt)
-
-# target link include to executable
-target_include_directories(Customize_OCR PRIVATE ${XLNT_INCLUDE_DIR})
+if (MSYS)
+    target_link_libraries(Customize_OCR PUBLIC  Qt${QT_VERSION_MAJOR}::Widgets ${OpenCV_LIBS}
+            -llibleptonica -llibleptonica -llibtesseract -lxlnt)
+else()
+    target_link_libraries(Customize_OCR PRIVATE ${CONAN_LIBS} Qt${QT_VERSION_MAJOR}::Widgets xlnt::xlnt)
+endif()
 
 
 # the executable require file
@@ -96,7 +111,7 @@ set(BIN_NEED_FILE
         "model/chi_tra.traineddata"
         "model/eng.traineddata"
         )
-list(APPEND BIN_NEED_FILE "xlnt.dll")
+
 
 
 # move ocr model to executable model folder
@@ -107,6 +122,7 @@ foreach(file_name ${BIN_NEED_FILE})
             "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${file_name}")
 endforeach()
 
+message(${CMAKE_BINARY_DIR})
 
 ##foreach(file_name ${_IMPORT_CHECK_FILES_FOR_xlnt::xlnt})
 #    # copy xlnt DLL into xlnt.test directory
@@ -115,5 +131,3 @@ endforeach()
 #            "${_IMPORT_PREFIX}/lib/xlnt.lib"
 #            "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/a.dll")
 ##endforeach()
-
-

@@ -4,7 +4,6 @@
 
 #ifndef CUSTOMIZE_IMAGE_FORMAT
 #define CUSTOMIZE_IMAGE_FORMAT
-
 #include <opencv2/opencv.hpp>
 #include <QDebug>
 #include <QImage>

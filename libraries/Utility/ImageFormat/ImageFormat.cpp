@@ -3,6 +3,7 @@
 //
 
 #include "ImageFormat.h"
+#include <leptonica/allheaders.h>
 
 namespace Utility {
     cv::Mat QImage2cvMat(QImage image)
@@ -76,7 +77,7 @@ namespace Utility {
         pixs = pixCreate(width, height, depth);
         pixSetWpl(pixs, wpl);
         pixSetColormap(pixs, NULL);
-        l_uint32 *datas = pixs->data;
+        l_uint32 *datas = pixGetData(pixs);
 
         for (int y = 0; y < height; y++) {
             lines = datas + y * wpl;
