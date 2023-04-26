@@ -2,10 +2,12 @@
 #define OCR_FORMAT_CREATE_WIDGET_H
 
 #include <QWidget>
+#include <QMessageBox>
 #include <QtWidgets/QFileDialog>
 #include <src/struct/OCR_Data/OCR_Data_ListWidget.h>
 #include <memory>
 #include <vector>
+#include <Utility/Files_Manager/Files_Manager.h>
 
 namespace Ui {
 class OCR_Format_Create_Widget;
@@ -24,32 +26,59 @@ public:
 
 private:
 
-    bool is_crop_image_range = false;
-    bool is_import_image = false;
+    struct Status {
+        bool image_range = false;
+        bool load_file = false;
+        bool load_image = false;
+        int current_format_index = 0;
+        bool is_crop = false;
+        bool is_create_cb = false;
+    };
+    Status status;
 
-
-    std::shared_ptr<OCR_Data> now_edit_format;
-    OCR_Data_List ocr_data_list;
-    int now_edit_format_index = 0;
-
-
-    [[nodiscard]] QRect get_crop_image_rect() const;
-
+    std::shared_ptr<OCR_Data> current_format;
+    OCR_Data_List format_datas;
 
     void widget_init();
+//    void widget_refresh(const OCR_Data data);
+    void widget_refresh();
 
-    void tag_choose_refresh();
-    void change_image_crop_label(QRect input_rect) const;
+    void crop_label_refresh(QRect input_rect) const;
+
+//    void tag_choose_refresh();
+//    void change_image_crop_label(QRect input_rect) const;
 
 
 public slots:
-    void load_setting_file();
+
+    // loading format from file
+    void load_file();
+
+    // add new format file
+    void new_file();
+
+    // save format file
+    void save_file();
+
+    // select, clear image crop range
+    void crop_range();
+    void clear_crop_range();
+
+    // add tag
     void add_tag();
-    void add_image();
-    void choose_image_crop_range();
-    void clear_image_crop_range();
-    void cb_tag_choose_index_change(int index);
-    void le_tag_name_change(const QString & text) const;
+
+    // cb select
+    void cb_tag_select(int);
+
+    // le tag name change
+    void le_tag_name_change(const QString &);
+
+    void cb_is_search(bool);
+
+//    void choose_image_crop_range();
+//    void clear_image_crop_range();
+//    void cb_tag_choose_index_change(int index);
+//    void le_tag_name_change(const QString & text) const;
 };
 
 #endif // OCR_FORMAT_CREATE_WIDGET_H
