@@ -26,6 +26,8 @@ struct OCR_Data {
     QPoint first_press_pos;
     QPoint second_press_pos;
     QPixmap crop_image;
+    bool is_search = false;
+    int search_weight = 0;
 };
 
 class OCR_Data_ListItem : public QWidget {
@@ -55,6 +57,8 @@ class OCR_Data_List {
             QString tag_name_key = "tag";
             QString excel_key = "excel";
             QString crop_image_rect_key = "image_rect";
+            QString is_search_key = "is_search";
+            QString search_weight_key = "search_weight";
         };
         Struct_data format_data;
     };
@@ -64,7 +68,7 @@ public:
     ~OCR_Data_List() = default;
     OCR_Data_List(QImage image, std::vector<std::shared_ptr<OCR_Data>>);
 
-    std::shared_ptr<OCR_Data> at(const unsigned int &index);
+    std::shared_ptr<OCR_Data>& at(const unsigned int &index);
 
     void push_back(const std::shared_ptr<OCR_Data>& data);
 
@@ -76,7 +80,7 @@ public:
     size_t size();
 
     bool empty();
-
+    int distance(const std::shared_ptr<OCR_Data>& data);
     void clear();
 
 private:

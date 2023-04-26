@@ -42,7 +42,8 @@ bool OCR_Data_List::save_file(const QString& file_path) {
         QJsonObject format_data;
         format_data.insert(this->json_dict.format_data.tag_name_key, format->tag);
         format_data.insert(this->json_dict.format_data.excel_key, format->xlsx_cell);
-
+        format_data.insert(this->json_dict.format_data.is_search_key, format->is_search);
+        format_data.insert(this->json_dict.format_data.search_weight_key, format->search_weight);
         // Image Crop Rect
         {
             QRect rect = format->crop_rect;
@@ -116,6 +117,9 @@ void OCR_Data_List::load_file(const QString &file_path) {
         /* set data */
         format_data->tag = format[this->json_dict.format_data.tag_name_key].toString();
         format_data->xlsx_cell = format[this->json_dict.format_data.excel_key].toString();
+        format_data->is_search = format[this->json_dict.format_data.is_search_key].toBool();
+        format_data->search_weight = format[this->json_dict.format_data.search_weight_key].toInt();
+
 
         // is part is image get the image crop range (QPoint to int)
         {
@@ -138,7 +142,7 @@ QImage OCR_Data_List::get_image() {
     return this->image;
 }
 
-std::shared_ptr<OCR_Data> OCR_Data_List::at(const unsigned int &index) {
+std::shared_ptr<OCR_Data> & OCR_Data_List::at(const unsigned int &index) {
     return this->format_list.at(index);
 }
 
@@ -157,6 +161,25 @@ bool OCR_Data_List::empty() {
 void OCR_Data_List::clear() {
     this->format_list.clear();
 }
+
+int OCR_Data_List::distance(const std::shared_ptr<OCR_Data> &data) {
+
+    int index = 0;
+    for (const auto & iter : format_list)
+    {
+        if (iter->tag == data->tag)
+            return index;
+        index++;
+    }
+
+//    auto itr = std::find(this->format_list.begin(), this->format_list.end(), data);
+//
+//    if (itr != this->format_list.end())
+//        return std::distance(this->format_list.begin(), itr);
+
+    return 0;
+}
+
 
 OCR_Data_ListWidget::OCR_Data_ListWidget(QWidget *parent) : QListWidget(parent) {
 
