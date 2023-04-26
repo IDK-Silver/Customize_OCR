@@ -23,8 +23,8 @@ void ImageOCR::set_image(cv::Mat input_image)
         cv::imwrite("./ocr_gray_image.jpg", input_image);
     #endif
 
-    /* image adaptive threshold*/
-    cv::adaptiveThreshold(input_image, input_image, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 15, 2);
+//    /* image adaptive threshold*/
+//    cv::adaptiveThreshold(input_image, input_image, 255, cv::ADAPTIVE_THRESH_MEAN_C, cv::THRESH_BINARY_INV, 15, 2);
 
     #if (ProgramTest)
         cv::imwrite("./ocr_adaptive_threshold_image.jpg", input_image);
