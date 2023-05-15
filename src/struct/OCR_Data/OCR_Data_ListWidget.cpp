@@ -235,7 +235,11 @@ void OCR_Data_ListItem::refresh_widget_data() {
     this->ui->tag_lab->setText(this->ocr_data->tag);
     this->ui->xlsx_cell_lab->setText(this->ocr_data->xlsx_cell);
     this->ui->ocr_text_lineEdit->setText(this->ocr_data->ocr_text);
-    this->ui->crop_image_lab->setPixmap(this->ocr_data->crop_image);
+
+    QPixmap qPixmap = this->ocr_data->crop_image;
+    qPixmap.scaled(this->ui->crop_image_lab->size(), Qt::KeepAspectRatio);
+    this->ui->crop_image_lab->setScaledContents(true);
+    this->ui->crop_image_lab->setPixmap(qPixmap);
 }
 
 void OCR_Data_ListItem::copy_from(const std::shared_ptr<OCR_Data>& data) {
