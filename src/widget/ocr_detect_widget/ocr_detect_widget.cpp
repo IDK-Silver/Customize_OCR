@@ -178,14 +178,15 @@ void OCR_Detect_Widget::widget_init() {
 //    {
 //        this->ui->cm_write_mode->setCurrentIndex(1);
 //    }
-//    else
-//    {
-//        if (Config::Global::is_output_io_error_message)
-//        {
-//            std::cerr << "Can't read config setting - Xlsx Option - Unknown" << std::endl;
-//        }
-//        this->ui->cm_write_mode->setCurrentIndex(0);
-//    }
+    else
+    {
+        if (Config::Global::is_output_io_error_message)
+        {
+            std::cerr << "Can't read config setting - Xlsx Option - Unknown" << std::endl;
+        }
+        this->ui->cm_write_mode->setCurrentIndex(0);
+        config.set_xlsx_write_mode(config.XlsxOption.WriteMode.add);
+    }
 }
 
 void OCR_Detect_Widget::xlsx_write_mode_change(int index) {
